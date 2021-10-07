@@ -1,0 +1,177 @@
+<%
+var session = typeof session=="undefined" ? null : session;
+
+%>
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+    <% if(session.uLevel == "관리자"){%>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="smart-form">
+                <fieldset>
+                    <section>
+                        <label class="select">
+                            <select class="input-sm" id="companySelect" onchange="getWaitingViewDataAjax(this.value);">
+                                <option value='0' selected='' disabled=''>회사명/대표명 선택</option>
+                            </select> <i></i> </label>
+                    </section>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <%}%>
+    <br>
+
+    <div id="contentDiv">
+
+    </div>
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+
+<style>
+    .carousel-inner {height:1000px; }
+    .carousel-caption{bottom:initial; color:black; text-shadow:none}
+    .item {height:1000px}
+    #videoPreview {max-width:600px; max-height: 500px}
+    .dropzone .dz-preview .dz-details .dz-filename{white-space:initial}
+    .dz-filename {display: none}
+    .dropzone .dz-preview .dz-image {display: flex}
+    .dz-image img {max-width: 100%; max-height: 100%}
+</style>
+
+<!-- PAGE RELATED PLUGIN(S) -->
+<script src="/javascripts/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+<script src="/javascripts/js/plugin/dropzone/dropzone.min.js"></script>
+
+
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    var dropzone ;
+    var removeList = [];
+
+    $(document).ready(function() {
+
+        pageSetUp();
+
+        getCompanyNameListAjax(function (data) {
+            var html = "";
+
+            $.each(data, function (index, item) {
+                html += "<option value='" + item.cID + "'>" + item.companyName + "</option>";
+            });
+
+            $("#companySelect").append(html);
+        });
+
+        <%if(session.uLevel == "사용자"){%>
+        getWaitingViewDataAjax("<%=session.cID%>");
+        <%}%>
+    });
+
+    function initView() {
+        removeList = [];
+
+        $('input[type=radio][name=waitingViewType]').bind("change", function() {
+            switch (this.value){
+                case '0' || 0:  $('.carousel').carousel(0); break;
+                case '1' || 1:  $('.carousel').carousel(1); break;
+                case '2' || 2:  $('.carousel').carousel(2); break;
+            }
+        });
+
+        $('.carousel').each(function(){
+            $(this).carousel({
+                interval: false
+            });
+        });
+
+        //chrome 7+ firefox 4+ IE 10+ Opera 12+ safari 6+
+        Dropzone.autoDiscover = false;
+        dropzone = new Dropzone('#dropzone', {
+            url: "/company/waitingView/image",
+            addRemoveLinks : true,  //업로드 취소 및 추가 삭제 미리 보기 그림 링크 를 기본 안 추가
+            autoProcessQueue: false,    //자동업로드
+            uploadMultiple: true,   //여러파일 업로드
+            maxFilesize: 2,   //단위 MB
+            maxFiles: 15,   //최대 갯수
+            resizeWidth: 1920,
+            resizeHeight: 1080,
+            resizeMethod: "contain",
+            resizeQuality: 0.75,
+            paramName : "dropzoneFile",
+            method : "post",
+            acceptedFiles: ".jpeg,.jpg,.gif,.JPEG,.JPG,.GIF",     //허용 확장자 (png는 허가 안함)
+            dictDefaultMessage: "<span><span class='text-center'><span class='font-lg visible-xs-block visible-sm-block visible-lg-block'><span class='font-lg'><i class='fa fa-caret-right text-danger'></i> 클릭하거나 이미지를 올리세요 </span><span><br><h4 class='display-inline'> (최대 12개)</h4></span>",
+            dictResponseError: '파일 업로드 에러!',
+            fallback: function() {  // 지원하지 않는 IE 10 미만일 경우
+                document.getElementById('trueForm').style.display = "none";
+                document.getElementById('falseForm').style.display = 'block';
+            },
+            init : function () {
+                this.on('success', function(file, json) {   // 파일이 서버에 업로드가 완료 되었을때
+
+                    if(json.msg=='OK'){  //만약에 response message 가 OK 라면
+                        console.log("OK : " + file);
+                    } else {    // 만약에 OK 가 아니라면???
+                        console.log("upload error : " + res.msg);
+                    }
+                    console.log(json);
+                });
+
+                this.on("removedfile", function (data) {
+                    console.log(data);   // 삭제할 파일명
+
+                    if(data.status == undefined){   //삭제 리스트 넣기
+                        removeList.push(data.name);
+                    }
+                });
+
+                this.on("complete", function () {
+                    dropzone.processQueue();
+                    console.log("complete");
+                });
+
+                this.on("queuecomplete", function () {
+                    console.log("All files have uploaded ");
+                    smallNotification("Success", "이미지가 등록되었습니다.", 1);
+                })
+            }
+        });
+    }
+
+    function submitDropzone(cID) {
+        if(dropzone.getQueuedFiles().length > 0) {
+            dropzone.processQueue();
+        }else{
+            chaneWaitingViewType(cID, 1);
+        }
+
+        if (removeList.length > 0) {
+            deleteDropzoneList(removeList);
+        }
+    }
+
+</script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>

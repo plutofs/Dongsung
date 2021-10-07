@@ -1,0 +1,324 @@
+@charset "UTF-8";
+
+
+@font-face {
+  font-family: 'UnBatang';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/UnBatang.ttf') format('truetype'), url('/storage/font/UnBatang.ttf') format('truetype'), local('UnBatang');
+}
+@font-face {
+  font-family: 'UnBatang';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../font/UnBatangBold.ttf') format('truetype'), url('/storage/font/UnBatangBold.ttf') format('truetype'), local('UnBatang');
+}
+
+@font-face {
+  font-family: 'UnDinaru';
+  font-style: normal;
+  font-weight: 300;
+  src: url('/storage/font/UnDinaruLight.ttf') format('truetype'), url('../font/UnDinaruLight.ttf') format('truetype'), local('UnDinaru');
+}
+@font-face {
+  font-family: 'UnDinaru';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/storage/font/UnDinaru.ttf') format('truetype'), url('../font/UnDinaru.ttf') format('truetype'), local('UnDinaru');
+}
+@font-face {
+  font-family: 'UnDinaru';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/storage/font/UnDinaruBold.ttf') format('truetype'), url('../font/UnDinaruBold.ttf') format('truetype'), local('UnDinaru');
+}
+
+@font-face {
+  font-family: 'UnDotum';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/UnDotum.ttf') format('truetype'), url('/storage/font/UnDotum.ttf') format('truetype'), local('UnDotum');
+}
+@font-face {
+  font-family: 'UnDotum';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../font/UnDotumBold.ttf') format('truetype'), url('/storage/font/UnDotumBold.ttf') format('truetype'), local('UnDotum');
+}
+
+@font-face {
+  font-family: 'UnGraphic';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/UnGraphic.ttf') format('truetype'), url('/storage/font/UnGraphic.ttf') format('truetype'), local('UnGraphic');
+}
+@font-face {
+  font-family: 'UnGraphic';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../font/UnGraphicBold.ttf') format('truetype'), url('/storage/font/UnGraphicBold.ttf') format('truetype'), local('UnGraphic');
+}
+
+@font-face {
+  font-family: 'UnPilgi';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/UnPilgi.ttf') format('truetype'), url('/storage/font/UnPilgi.ttf') format('truetype'), local('UnPilgi');
+}
+@font-face {
+  font-family: 'UnPilgi';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../font/UnPilgiBold.ttf') format('truetype'), url('/storage/font/UnPilgiBold.ttf') format('truetype'), local('UnPilgi');
+}
+
+@font-face {
+  font-family: 'UnGungseo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/UnGungseo.ttf') format('truetype'), url('/storage/font/UnGungseo.ttf') format('truetype'), local('UnGungseo');
+}
+
+body{
+	font-family: 'UnBatang';
+	font-weight:normal;
+	letter-spacing:0em;
+}
+
+/* reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, menu, nav, output, ruby, section, summary, time, mark, audio, video, input, textarea{
+    margin:0;
+    padding:0;
+    border:0;
+    font-size:100%;
+    vertical-align:baseline;
+
+}
+html,body{height:100%;}
+
+article, aside, details, figcaption, figure, footer, header, menu, nav, section{
+    display:block;
+}
+
+ol, ul{
+    list-style:none;
+}
+
+blockquote, q{
+    quotes:none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after{
+    content:'';
+    content:none;
+}
+
+strong{
+    font-weight:bold;
+}
+
+table{
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+img{
+    border:0;
+    max-width:100%;
+    vertical-align:top
+}
+
+img, fieldset{
+    border:0
+}
+
+ul, ol, li, dl{
+    list-style:none;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-size:100%;
+    font-weight:normal;
+}
+
+hr{
+    display:none;
+}
+
+a{
+    color:inherit;
+}
+
+a, a:link{
+    text-decoration:none;
+}
+
+a:visited{
+    color:#333;
+}
+
+a:hover, a:active{
+    color:#333;
+    text-decoration:none;
+}
+
+em, i, address{
+    font-style:normal;
+    font-weight:normal;
+}
+
+legend, caption{
+    display:none;
+    clear:both;
+}
+
+input, textarea, select, button, table{
+    font-size:inherit;
+    font-family:inherit;
+    line-height:inherit;
+}
+
+
+textarea, input{
+    background:none;
+    -webkit-border-radius:1px;
+    -webkit-apprearance:none;
+}
+
+textarea{
+    resize:none;
+}
+
+label{
+    cursor:pointer;
+}
+
+table{
+    /*border-collapse: collapse;table-layout:fixed; */
+    display:table;
+    border-spacing:0;
+    border-collapse:collapse;
+	font-size:12px;
+}
+
+caption{
+    display:table-caption;
+}
+
+colgroup{
+    display:table-column-group;
+}
+
+col{
+    display:table-column;
+}
+
+thead{
+    display:table-header-group;
+}
+
+tbody{
+    display:table-row-group;
+}
+
+tfoot{
+    display:table-footer-group;
+}
+
+tr{
+    display:table-row;
+    padding:0;
+    margin:0
+}
+
+td, th{
+    display:table-cell;
+    padding:0;
+    margin:0
+}
+
+button{
+    margin:0;
+    padding:0;
+    border:0;
+    cursor:pointer
+}
+
+/*layout setting*/
+
+
+.ellipsis{
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden
+}
+
+.clearfix:before, .clearfix:after{
+    content:" ";
+    display:table
+}
+
+.clearfix:after{
+    clear:both
+}
+
+.clearfix{
+    *zoom:1
+}
+
+.blind, legend, hr{
+    display:block;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    position:absolute;
+    top:0;
+    left:-1000em
+}
+
+caption{
+    width:0;
+    height:0;
+    font-size:0;
+    line-height:0;
+    text-indent:-9999px;
+    overflow:hidden
+}
+
+.ellipsis{
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden
+}
+
+/* skipNav */
+#skipNav{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+}
+
+#skipNav a{
+    display:block;
+    height:1px;
+    margin-bottom:-1px;
+    overflow:hidden;
+    text-align:center;
+    text-decoration:none;
+    color:#333;
+    font-size:12px;
+}
+
+#skipNav a:hover, #skipNav a:focus, #skipNav a:active{
+    display:block;
+    height:25px;
+    padding:5px 0;
+    background:none repeat scroll 0 0 #f2f2f2;
+}
+
+.transparent{
+    filter:alpha(opacity=50); /* internet explorer */
+    -khtml-opacity:0.5; /* khtml, old safari */
+    -moz-opacity:0.5; /* mozilla, netscape */
+    opacity:0.5; /* fx, safari, opera */
+}

@@ -1,0 +1,492 @@
+<%
+var rtID = typeof rtID=="undefined" ? null : rtID;
+var data = typeof data=="undefined" ? null : data;
+var type = null;
+var roomTotal = null, roomTotalList = null, guestDataList = null;
+
+if(data != null){
+    roomTotal = data[0][0];     //roomTotal Data
+    roomTotalList = [];    //totalList Data
+    data[1].forEach(function (element, index) {
+        roomTotalList.push(element.rID);
+    });
+    guestDataList = data[2];    //recentGuestView Data
+
+    if(roomTotal!= undefined && (roomTotal.rtTemplate == undefined || roomTotal.rtTemplate == null)){
+        roomTotal.rtTemplate = "total1-1.html";
+    }
+}
+%>
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+
+    <!-- widget grid -->
+    <section id="" class="">
+
+        <!-- row -->
+        <div class="row">
+
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <iframe id="previewDiv" class="col-sm-12" style="padding:0px; border:0px">
+                </iframe>
+            </article>
+
+            <!-- NEW WIDGET START -->
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-fullscreenbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-check"></i> </span>
+                        <h2>종합 안내  </h2>
+
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+
+                        <!-- widget content -->
+                        <div class="widget-body">
+
+                            <div class="row">
+                                <form id="wizard" novalidate="novalidate" name="wizard" action="/room/roomTotalEdit" method="post">
+                                    <input type="hidden" id="rtID" name="rtID" value="<%=rtID%>"/>
+                                    <input type="hidden" id="roomCnt" name="roomCnt" value="<%=roomTotalList.length%>"/>
+                                    <div id="bootstrap-wizard" class="col-sm-12">
+                                        <div class="form-bootstrapWizard hide-step">
+                                            <ul class="bootstrapWizard form-wizard" id="stepWizard">
+                                                <li class="active" data-target="#step1" style="width:33%">
+                                                    <a href="#tab1" data-toggle="tab" onclick="$('#nextButton').removeClass('hide');$('#finishButton').addClass('hide');"> <span class="step">1</span> <span class="title">빈소 선택</span> </a>
+                                                </li>
+                                                <li data-target="#step2" style="width:33%">
+                                                    <a href="#tab2" data-toggle="tab" onclick="$('#nextButton').removeClass('hide');$('#finishButton').addClass('hide');"> <span class="step">2</span> <span class="title">화면 정보</span> </a>
+                                                </li>
+                                                <!--<li data-target="#step3" style="width:33%">-->
+                                                    <!--<a href="#tab3" data-toggle="tab" onclick="$('#nextButton').addClass('hide');$('#finishButton').removeClass('hide');"> <span class="step">3</span> <span class="title">완료</span> </a>-->
+                                                <!--</li>-->
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="tab-content" id="tab-content">
+                                            <div class="tab-pane active" id="tab1">
+                                                <br>
+                                                <h3><strong>Step 1 </strong> - 빈소 선택</h3>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3" style="margin-left: 10px">빈소 자동 선택</label>
+                                                    <section class="col-sm-3">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="rtAuto" id="rtAuto">
+                                                                <option value="0" selected>비활성화</option>
+                                                                <option value="1">활성화</option>
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <div class="col-md-10" id="roomCheckList">
+                                                            <%guestDataList.forEach(function (element, index) { %>
+                                                            <div class="checkbox-inline">
+                                                                <label>
+                                                                    <input type="checkbox" class="checkbox style-0" name="roomCheckList" value="<%=element.mID%>">
+                                                                    <span><%=element.rName%> / <%=element.gName%></span>
+                                                                </label>
+                                                            </div>
+                                                            <%});%>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="tab-pane" id="tab2">
+                                                <br>
+                                                <h3><strong>Step 2</strong> - 화면 정보</h3>
+
+                                                <div class="row" style="display: none;">
+                                                    <label class="col-sm-3">안내 문구</label>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                                <input class="form-control" placeholder="안내 문구" type="text" name="rtInfo" id="rtInfo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">템플릿 선택</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="rtTemplate" id="rtTemplate">
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">폰트 선택</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="rtAllFont" id="rtAllFont">
+                                                                <option value="Nanum" selected>나눔고딕체</option>
+                                                                <option value="UnBatang">바탕체</option>
+                                                                <option value="UnDinaru">디나루체</option>
+                                                                <option value="UnGungseo">궁서체</option>
+                                                                <option value="UnDotum">돋움체</option>
+                                                                <option value="UnGraphic">그래픽체</option>
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">로고 활성화</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="rtEnableLogo" id="rtEnableLogo">
+                                                                <option value="0" selected>비활성화</option>
+                                                                <option value="1">활성화</option>
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+                                            </div>
+
+                                            <!--<div class="tab-pane" id="tab3">-->
+                                                <!--<br>-->
+                                                <!--<h3><strong>Step 3</strong> - 완료</h3>-->
+                                                <!--<br>-->
+                                                <!--<h1 class="text-center text-success"><strong><i class="fa fa-check fa-lg"></i> Complete</strong></h1>-->
+                                                <!--<h4 class="text-center">완료 버튼을 눌러주세요.</h4>-->
+                                                <!--<br>-->
+                                                <!--<br>-->
+                                            <!--</div>-->
+
+                                            <div class="form-actions">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <ul class="pager wizard no-margin">
+                                                            <!--<li class="previous first disabled">
+                                                            <a href="javascript:void(0);" class="btn btn-lg btn-default"> First </a>
+                                                            </li>-->
+                                                            <li class="previous disabled" id="previousButton">
+                                                                <a href="javascript:void(0);" class="btn btn-lg btn-default"> 이전 </a>
+                                                            </li>
+                                                            <!--<li class="next last">
+                                                            <a href="javascript:void(0);" class="btn btn-lg btn-primary"> Last </a>
+                                                            </li>-->
+                                                            <li class="next" id="nextButton">
+                                                                <a href="javascript:void(0);" class="btn btn-lg txt-color-darken"> 다음 </a>
+                                                            </li>
+                                                            <li class="next hide" id="finishButton">
+                                                                <a href="javascript:void(0);" class="btn btn-lg txt-color-darken"> 완료 </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- end widget content -->
+
+                    </div>
+                    <!-- end widget div -->
+
+                </div>
+                <!-- end widget -->
+
+            </article>
+            <!-- WIDGET END -->
+
+        </div>
+
+        <!-- end row -->
+
+    </section>
+    <!-- end widget grid -->
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+
+<style>
+    .full_width {width:100%}
+    .checkbox-inline {margin-left:10px}
+    .tab-pane {min-height: 250px}
+    #previewDiv{background-color: white}
+    .hide-step {position: absolute; top: -9999px; left: -9999px;}
+</style>
+<!-- PAGE RELATED PLUGIN(S) -->
+<script src="/javascripts/js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="/javascripts/js/plugin/fuelux/wizard/wizard.min.js"></script>
+<script src="/javascripts/js/plugin/jquery-form/jquery-form.min.js"></script>
+<script src="/javascripts/js/plugin/maxlength/bootstrap-maxlength.min.js"></script>
+
+
+<script type="text/javascript">
+
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+
+    $(document).ready(function() {
+        pageSetUp();
+
+        document.getElementById("rtAllFont").options[0].selected=true;
+        document.getElementById("rtEnableLogo").options[0].selected=true;
+
+        var tabContent = $("#tab-content");
+        var previewDiv = $('#previewDiv');
+        var template = "<%=roomTotal!=undefined ? roomTotal.rtTemplate : 'total1.html'%>";
+        previewDiv.attr("src", template==="auto" ? "/storage/total/" + getAutoTotalTemplate(<%=roomTotalList.length%>) : "/storage/total/" + template);
+        previewDiv.css("height", previewDiv.width() * 9 / 16);
+
+        /*$("#stepWizard").click(function (e) {   //step 아이콘 클릭 막기.
+         e.stopPropagation();
+         })*/
+
+        $('#tabs').tabs();
+
+        getRTTemplates(function () {
+            <%if(roomTotal!=undefined){%>
+                $("#rtTemplate").val("<%=roomTotal.rtTemplate%>");
+            <%}else{%>
+                document.getElementById("rtTemplate").options[0].selected=true;
+            <%}%>
+        });         //템플릿 리스트 가져오기.
+
+        getCompanyWithCallback('', '<%=rtID%>', function (data) { //로고 정보 세팅
+            switch (data.responseStatus){
+                case 200:   $("#rtEnableLogo").attr("logoPath", "/upload/logo/" + data.data[0].cImage);
+                <%if(roomTotal!=undefined && roomTotal.rtEnableLogo==1){%>
+                    var frame = document.getElementById("previewDiv");
+                    var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+
+                    previewDiv.load(function () {
+                        doc.setLogo("/upload/logo/" + data.data[0].cImage);
+                    });
+                <%}%>
+                    break;
+                case 204:   $("#rtEnableLogo").attr("logoPath", "");     break;
+                default:    smallNotification("Error", "로고 정보를 가져올수 없습니다.",0);  break;
+            }
+        });
+
+        <%if(roomTotalList!=null){
+            roomTotalList.forEach(function (element, index) { %>
+                $("input:checkbox[name=roomCheckList][value='<%=element%>']").attr("checked", true).parent().addClass('on');
+            <%});
+        }%>
+
+        previewDiv.one('load', function () {
+            <%if(roomTotal != undefined){%>
+                tabContent.find("#rtTemplate").val("<%=roomTotal.rtTemplate%>").attr("selected", "selected");
+                if("<%=roomTotal.rtAllFont%>".length>0) {
+                    tabContent.find("#rtAllFont").val("<%= roomTotal.rtAllFont %>").attr("selected", "selected");
+                }
+                <%if(roomTotal.rtEnableLogo==1){%>
+                    tabContent.find("#rtEnableLogo").val("<%=roomTotal.rtEnableLogo%>").attr("selected", "selected");
+                <%}%>
+                if("<%=roomTotal.rtInfo%>".length>0){
+                    tabContent.find("#rtInfo").val("<%=roomTotal.rtInfo%>");
+                }
+            <%}%>
+        });
+
+        $(".checkbox").change(function(event){
+            var selected = new Array();
+            $("input:checkbox[name=roomCheckList]:checked").each(function () {
+                selected.push($(this).val());
+            });
+            $("#roomCnt").val($("input:checkbox[name=roomCheckList]:checked").length);
+            if($("#rtTemplate").val() === "auto") {
+                autoTotalTemplate($("#previewDiv"), $("#roomCnt").val());
+            }
+            var frame = document.getElementById("previewDiv");
+            var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+            var total = [];
+            <%if(guestDataList!=null){
+            guestDataList.forEach(function (element, index) {
+            %>
+            if(selected.indexOf("<%=element.mID%>") >=0) {
+                var tmp = {
+                    "ipgwan": "<%= element.ipgwan %>",
+                    "barin": "<%= element.barin %>",
+                    "rName": "<%= element.rName %>",
+                    "gName": "<%= element.gName %>",
+                    "jangji": "<%= element.jangji.replace(/\n|\r\n|\r/g, '\\n') %>",
+                    "gSangJuTotal": "<%= element.gSangJuTotal.replace(/\n|\r\n|\r/g, '\\n') %>",
+                    "gImage" : "<%=element.gImage%>",
+                    "gAge" : "<%=element.gAge%>",
+                    "gSex" : "<%=element.gSex%>",
+                    "gReligionPosition" : "<%=element.gReligionPosition%>"
+                }
+                total.push(tmp);
+            }
+            <%});
+            }%>
+            console.log(total);
+            doc.addGuest(total, "/upload/guest/");
+        });
+
+        previewDiv.load(function() {
+            var frame = document.getElementById("previewDiv");
+            var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+            var total = [];
+            <%if(roomTotalList!=null){
+                roomTotalList.forEach(function (element,   index) {
+                    guestDataList.forEach(function (element2, index2) {
+                        if(element==element2.mID){  %>
+                            var tmp = {
+                                "ipgwan": "<%= element2.ipgwan %>",
+                                "barin" : "<%= element2.barin %>",
+                                "rName" : "<%= element2.rName %>",
+                                "gName" : "<%= element2.gName %>",
+                                "jangji" : "<%= element2.jangji.replace(/\n|\r\n|\r/g, '\\n') %>",
+                                "gSangJuTotal" : "<%= element2.gSangJuTotal.replace(/\n|\r\n|\r/g, '\\n') %>",
+                                "gImage" : "<%=element2.gImage%>",
+                                "gAge" : "<%=element2.gAge%>",
+                                "gSex" : "<%=element2.gSex%>",
+                                "gReligionPosition" : "<%=element2.gReligionPosition%>"
+                            }
+                            total.push(tmp);
+                        <%}
+                    });
+                });
+            }%>
+            doc.addGuest(total, "/upload/guest/");
+            $("#wizard .checkbox").trigger("change");
+            $("#wizard #rtEnableLogo").trigger("change");
+            $("#wizard #rtAllFont").trigger("change");
+            $("#rtInfo").trigger("input");
+        });
+
+        //Bootstrap Wizard Validations
+        var $validator = $("#wizard").validate({
+            rules: {},
+            messages: {},
+            highlight: function (element) { $(element).closest('.form-group').removeClass('has-success').addClass('has-error'); },
+            unhighlight: function (element) {   $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {    error.insertAfter(element.parent());
+                } else {    error.insertAfter(element); }
+            }
+        });
+
+        $('#bootstrap-wizard').bootstrapWizard({
+            'tabClass': 'form-wizard',
+            'onPrevious': function (tab, navigation, index) {
+                $('#nextButton').removeClass("hide");
+                $('#finishButton').addClass("hide");
+            },
+            'onNext': function (tab, navigation, index) {
+                var $valid = $("#wizard").valid();
+                if (!$valid) {
+                    $validator.focusInvalid();
+                    return false;
+                } else {
+                    $('#bootstrap-wizard').find('.form-wizard').children('li').eq(index - 1).addClass('complete');
+                    $('#bootstrap-wizard').find('.form-wizard').children('li').eq(index - 1).find('.step')
+                        .html('<i class="fa fa-check"></i>');
+                }
+
+                if(index==1){
+                    $('#nextButton').addClass('hide');
+                    $('#finishButton').removeClass('hide');
+                }else{
+                    $('#nextButton').removeClass('hide');
+                    $('#finishButton').addClass('hide');
+                }
+            }
+        });
+
+        var wizard = $('.wizard').wizard();
+        $('#finishButton').click(function () {  wizard.trigger('finished'); });
+        wizard.on('finished', function (e, data) {  insertTotalRoomList();  });
+
+        //폰트 변경
+        $("#rtAllFont").on("change", function () {
+            var frame = document.getElementById("previewDiv");
+            var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+            $("#previewDiv").contents().find('*').css('font-family', $(this).val());
+        });
+
+        //템플릿 변경
+        $("#rtTemplate").on("change", function () {
+            var previewDiv = $('#previewDiv');
+
+            if($(this).val() === "auto"){
+                var roomCnt = $("#roomCnt").val();
+                autoTotalTemplate(previewDiv, roomCnt);
+            }else {
+                previewDiv.attr("src", "/storage/total/" + $(this).val());
+            }
+            previewDiv.one("load", function () {    previewDiv.trigger("resize");   });
+        });
+
+        //로고 활성화 변경
+        $("#rtEnableLogo").on("change", function () {
+            var frame = document.getElementById("previewDiv");
+            var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+
+            switch ($(this).val()){
+                case "0" || 0:  doc.setLogo("");    break;
+                case "1" || 1:  doc.setLogo($(this).attr("logoPath"));  break;
+            }
+        });
+
+        $("#rtAuto").on("change", function () {
+            var frame = document.getElementById("previewDiv");
+            var roomCheckList = $("#roomCheckList");
+
+            switch ($(this).val()){
+                case "0" || 0 :
+                    frame.style.visibility = "visible";
+                    roomCheckList.slideDown("fast");
+                    break;
+
+                case "1" || 1 :
+                    frame.style.visibility = "hidden";
+                    roomCheckList.slideUp("fast");
+                    break;
+            }
+        });
+
+        $("#rtInfo").on("input", function () {
+            var frame = document.getElementById("previewDiv");
+            var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+            doc.setInfoText($(this).val().replace(/\n|\r\n|\r/g, '<br>'));
+        });
+
+        resizePreview($("#previewDiv"));
+    })
+</script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>

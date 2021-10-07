@@ -1,0 +1,142 @@
+<!-- Left panel : Navigation area -->
+<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+<aside id="left-panel">
+
+  <!-- User info -->
+  <div class="login-info" style="float: bottom;position: relative;vertical-align: bottom;" data-toggle="modal" data-target="#logoModal" onclick='getCompanyWithCallback("<%=session.cID%>", "", function(data) {
+   var json = data.data[0];
+   switch (data.responseStatus){
+      case 200:
+        $("#profile_master").val(json.master);
+        $("#profile_businessNum").val(json.businessNum);
+        $("#profile_cAddress").val(json.cAddress);
+        $("#profile_cTel").val(json.cTel);
+        $("#profile_cFax").val(json.cFax);
+        if(json.cImage != undefined && json.cImage != null){
+          $("#logoImg").attr("src", "/upload/logo/" + json.cImage);
+        }else{
+            $("#logoImg").attr("src", "");
+        }
+      break;
+      default:    smallNotification("Error", "회사정보를 가져올수 없습니다.",0);  break;
+    }
+  })'>
+    <!-- User image size is adjusted inside CSS, it should stay as it -->
+    <!-- <span>
+ 이벤트 있음
+      <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+
+        <i class="fa fa-angle-down"></i>
+      </a>
+
+
+    </span>-->
+    <p id="nav_userID" style="font-size:25px;color:black;position: absolute;margin: 0 0 30px 10px;bottom: 0;"><%=session.userID%></p>
+    <p id="nav_cName" style="font-size:15px;color:black;position: absolute;margin: 0 0 10px 10px;bottom: 0;"><%=session.cName%></p>
+  </div>
+  <!-- end user info -->
+
+  <!-- NAVIGATION : This navigation is also responsive-->
+  <nav>
+    <!--
+    NOTE: Notice the gaps after each icon usage <i></i>..
+    Please note that these links work a bit different than
+    traditional href="" links. See documentation for details.
+    -->
+    
+    <!--li에 클래스 active-->
+    <ul>
+      <%if(session.uLevel=="관리자"){%>
+      <!--<li>
+        <a href="#" title="index"><i class="fa fa-lg fa-fw fa-dashboard"></i> <span class="menu-item-parent">Dashboard</span></a>
+      </li>-->
+      <li>
+        <a href="/company" title="지점 관리"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">지점 관리</span></a>
+      </li>
+      <li>
+        <a href="/user" title="사용자 관리"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">사용자 관리</span></a>
+      </li>
+      <li>
+        <a href="/stock" title="재고관리"><i class="fa fa-lg fa-fw fa-pencil"></i> <span class="menu-item-parent">재고관리</span></a>
+      </li>
+      <li>
+        <a href="/machine" title="라즈베리 관리"><i class="fa fa-lg fa-fw fa-laptop"></i> <span class="menu-item-parent">라즈베리 관리</span></a>
+      </li>
+      <li>
+        <a href="#" title="장례식장"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">장례식장</span></a>
+        <ul>
+          <li class="">
+            <a href="/room" title="분향실 관리"><span class="menu-item-parent">분향실 관리</span></a>
+          </li>
+          <li class="">
+            <a href="/room/total" title="종합 관리"><span class="menu-item-parent">종합 관리</span></a>
+          </li>
+          <li>
+            <a href="/scheduler" title="입관 관리"><span class="menu-item-parent">입관 관리</span></a>
+          </li>
+          <li>
+            <a href="/company/waitingView" title="대기화면 관리"><span class="menu-item-parent">대기화면 관리</span></a>
+          </li>
+          <li>
+            <a href="/room/roomTableView" title="분향실 조회"><span class="menu-item-parent">분향실 조회</span></a>
+          </li>
+        </ul>
+      </li>
+      <%}else if(session.uLevel=="사용자"){%>
+      <li class="">
+        <a href="/room" title="분향실 관리"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">분향실 관리</span></a>
+      </li>
+      <li class="">
+        <a href="#a" onclick="popupPwdUserTotal()" title="종합 관리"><i class="fa fa-lg fa-fw fa-list-alt"></i><span class="menu-item-parent">종합 관리</span></a>
+      </li>
+      <li>
+        <a href="/scheduler" title="입관 관리"><i class="fa fa-lg fa-fw fa-calendar-o"></i> <span class="menu-item-parent">입관 관리</span></a>
+      </li>
+      <li>
+        <a href="/company/waitingView" title="대기화면 관리"><i class="fa fa-lg fa-fw fa-caret-square-o-right"></i> <span class="menu-item-parent">대기화면 관리</span></a>
+      </li>
+      <!--<li>
+        <a href="/machine" title="라즈베리 관리"><i class="fa fa-lg fa-fw fa-laptop"></i> <span class="menu-item-parent">라즈베리 관리</span></a>
+      </li>-->
+      <%}%>
+      <!--
+      <li>
+        <a href="#" title="품목"><i class="fa fa-lg fa-fw fa-folder-open"></i> <span class="menu-item-parent">품목</span></a>
+        <ul>
+          <li class="">
+            <a href="item" title="품목 리스트"><span class="menu-item-parent">품목 리스트</span></a>
+          </li>
+          <li class="">
+            <a href="" title="입출고 기록"><span class="menu-item-parent">입출고 기록</span></a>
+          </li>
+          <li class="">
+            <a href="" title="품목 관리"><span class="menu-item-parent">품목 관리</span></a>
+            <ul>
+              <li class="">
+                <a href="" title="품목 입고"><span class="menu-item-parent">품목 입고</span></a>
+              </li>
+              <li class="">
+                <a href="" title="품목 출고"><span class="menu-item-parent">품목 출고</span></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" title="A/S"><i class="fa fa-lg fa-fw fa-phone-square"></i> <span class="menu-item-parent">A/S</span></a>
+        <ul>
+          <li class="">
+            <a href="" title="A/S"><span class="menu-item-parent">A/S</span></a>
+          </li>
+        </ul>
+      </li>
+-->
+    </ul>
+  </nav>
+
+  <span class="minifyme" data-action="minifyMenu">
+    <i class="fa fa-arrow-circle-left hit"></i>
+  </span>
+
+</aside>
+<!-- END NAVIGATION -->

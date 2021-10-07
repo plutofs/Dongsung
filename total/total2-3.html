@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd>
+
+<html lang="ko">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<title>total2-3</title> <!--파일명 넣기 (.html빼고)-->
+<link rel="stylesheet" type="text/css" href="init.css">
+<link rel="stylesheet" type="text/css" href="total.css">
+<style>
+  body{background-color:#c5a691;}
+  /*헤더*/
+  .wrap{
+    height:33.3% !important;
+  }
+  .wrap{
+    padding:0.7vh 1vw
+  }
+
+  .header{
+    background-color:#ede9e6;
+    height: 15%;
+    text-align: center;
+    font-size: 3.5vw;
+    border-radius:0.7rem;
+    width: 100%;
+    float: left;
+  }
+  .left, .right, .center{
+    height:100%;
+    float:left;
+    font-size: 2.2vw;
+  }
+  .left{
+    position: relative;
+    width:32%;
+  }
+  .right{
+    width:65%;
+  }
+  .gArrow{
+    padding:1vh;
+  }
+  /*중앙*/
+  .content{
+    width: 69.5%;
+    height: 83%;
+    margin-top: 1vh;
+    float: left;
+  }
+  .imageRoot{
+    width: 20.75vh;
+    height: 100%;
+  }
+  .sangjuRoot{
+    float:left;
+    height:100%;
+    margin-left:1vw;
+    border-radius:0.7rem;
+    font-size: 6vw;
+    background-color:#fbebdc;
+    overflow: hidden;
+  }
+  /*아래*/
+  .footer{
+    height: 83%;
+    float: right;
+    width: 30%;
+    margin-top: 1vh;
+  }
+  .ipgwan > div,.barin > div,.jangji > div{
+    float:left
+  }
+  .ipgwan > div:first-of-type,
+  .barin > div:first-of-type,
+  .jangji > div:first-of-type{
+    background: -moz-linear-gradient(top,#805439 0%,#55311b 100%);
+    background: -webkit-linear-gradient(top,#805439 0%,#55311b 100%);
+    background: linear-gradient(to bottom,#805439 0%,#55311b 100%);
+    height: 100%;
+    width: 24.2%;
+    display: table;
+    margin-right: 0.5vw;
+    color: #fff;
+    border-radius:0.7rem;
+    font-size: 1.8vw;
+  }
+  .ipgwan > div:last-of-type,
+  .barin > div:last-of-type,
+  .jangji > div:last-of-type{
+    background-color: #fbebdc;
+    height: 100%;
+    width: 74%;
+    border-radius:0.7rem;
+  }
+  .ipgwantxt,.barintxt,.jangjitxt{
+    display: table;
+    width: 100%;
+    height: 100%;
+    font-size: 2vw;
+    margin: 0 auto;
+  }
+  .jangjitxt{
+    font-size: 2.5vw;
+  }
+  .ipbar{
+    width:100%;
+    height: 31%;
+    margin-right: 0.5vw;
+    margin-bottom: 1vh;
+  }
+  .ipgwan,.barin{
+    width:100%;
+    height:50%
+  }
+  .ipgwan{
+    margin-bottom:0.5vh;
+  }
+  .jangji{
+    width:100%;
+    height: 65.5%;
+  }
+  .image{
+    background-color:#fbebdc;
+  }
+  .mainImg, .image{
+    border-radius:0.7rem;
+  }
+  .sangjuContainer{
+    font-size: 3vw;
+  }
+  .col1{
+      font-size: 4vh;
+  }
+</style>
+<script>
+  const MAX_CNT = 3; //템플릿 최대갯수
+  const SANGJU_MAX_CNT = 15; //상주 최대 라인수.
+  const JANGJI_MAX_CNT = 3; //장지 최대 라인수.
+  const LOOP_MAX_CNT = 100; //글자크기 조절 반복분 루프 max 횟수
+  var currentCnt = 0; //추가되어있는 갯수
+</script>
+<script src="./total.js"></script>
+</head>
+
+<body id="body" onload="">
+
+  <!-- 1 -->
+  <div class='wrap row'>
+    <div class='header'>
+      <div class='left container'><p class="containerText col1"></p> <img class="gArrow" src=''/></div>
+      <div class='right gNameRoot'><div class="gNameContainer"><p><span class="deco">故</span>&nbsp;<span class="col2"></span>&nbsp;<span class="col7"></span></p></div></div>
+    </div>
+    <div class='footer'>
+      <div class='ipbar'>
+        <div class='ipgwan'>
+          <div><p class='text'>입 관</p></div>
+          <div><div class='ipgwantxt'><p class='text col5'></p></div></div>
+        </div>
+        <div class='barin'>
+          <div><p class='text'>발 인</p></div>
+          <div><div class='barintxt'><p class='text col6'></p></div></div>
+        </div>
+      </div>
+      <div class='jangji'>
+        <div><p class='text'>장 지</p></div>
+        <div class="jangjiRoot"><div class='jangjitxt jangjiContainer'><p class='col4 text'></p></div></div>
+      </div>
+    </div>
+    <div class='content'>
+      <div class="imageRoot">
+        <div class='image'>
+          <img src='./img/user.jpg' class="mainImg"/>
+        </div>
+      </div>
+      <div class='sangjuRoot'>
+        <div class='sangjuContainer'>
+            <p class="col3"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class='wrap row'>
+    <div class='header'>
+      <div class='left container'><p class="containerText col1"></p> <img class="gArrow" src=''/></div>
+      <div class='right gNameRoot'><div class="gNameContainer"><p><span class="deco">故</span>&nbsp;<span class="col2"></span>&nbsp;<span class="col7"></span></p></div></div>
+    </div>
+    <div class='footer'>
+      <div class='ipbar'>
+        <div class='ipgwan'>
+          <div><p class='text'>입 관</p></div>
+          <div><div class='ipgwantxt'><p class='text col5'></p></div></div>
+        </div>
+        <div class='barin'>
+          <div><p class='text'>발 인</p></div>
+          <div><div class='barintxt'><p class='text col6'></p></div></div>
+        </div>
+      </div>
+      <div class='jangji'>
+        <div><p class='text'>장 지</p></div>
+        <div class="jangjiRoot"><div class='jangjitxt jangjiContainer'><p class='col4 text'></p></div></div>
+      </div>
+    </div>
+    <div class='content'>
+      <div class="imageRoot">
+        <div class='image'>
+          <img src='./img/user.jpg' class="mainImg"/>
+        </div>
+      </div>
+      <div class='sangjuRoot'>
+        <div class='sangjuContainer'>
+            <p class="col3"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class='wrap row'>
+    <div class='header'>
+      <div class='left container'><p class="containerText col1"></p> <img class="gArrow" src=''/></div>
+      <div class='right gNameRoot'><div class="gNameContainer"><p><span class="deco">故</span>&nbsp;<span class="col2"></span>&nbsp;<span class="col7"></span></p></div></div>
+    </div>
+    <div class='footer'>
+      <div class='ipbar'>
+        <div class='ipgwan'>
+          <div><p class='text'>입 관</p></div>
+          <div><div class='ipgwantxt'><p class='text col5'></p></div></div>
+        </div>
+        <div class='barin'>
+          <div><p class='text'>발 인</p></div>
+          <div><div class='barintxt'><p class='text col6'></p></div></div>
+        </div>
+      </div>
+      <div class='jangji'>
+        <div><p class='text'>장 지</p></div>
+        <div class="jangjiRoot"><div class='jangjitxt jangjiContainer'><p class='col4 text'></p></div></div>
+      </div>
+    </div>
+    <div class='content'>
+      <div class="imageRoot">
+        <div class='image'>
+          <img src='./img/user.jpg' class="mainImg"/>
+        </div>
+      </div>
+      <div class='sangjuRoot'>
+        <div class='sangjuContainer'>
+            <p class="col3"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

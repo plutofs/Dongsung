@@ -1,0 +1,261 @@
+<!-- Modal -->
+<div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">프로필 수정 </h4>
+            </div>
+            <div class="modal-body">
+                <form id="profile_form" action="/company/profile">
+                    <input type="hidden" name="cID" id="profile_cID" value="<%=session.cID%>">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>대표자명</label>
+                                <input type="text" class="form-control" name="master" id="profile_master" placeholder="대표자 이름" required />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>주소</label>
+                                <input type="text" class="form-control" name="cAddress" id="profile_cAddress" placeholder="주소" required />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>사업자 번호</label>
+                                <input type="text" class="form-control" name="businessNum" id="profile_businessNum" placeholder="사업자 번호" required />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>전화번호</label>
+                                <input type="text" class="form-control" name="cTel" id="profile_cTel" placeholder="전화번호" required />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>팩스번호</label>
+                                <input type="text" class="form-control" name="cFax" id="profile_cFax" placeholder="팩스번호" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="well well-sm well-primary">
+                                <p class="help-block">비밀번호 변경</p>
+                                <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>현재 비밀번호</label>
+                                        <input type="password" class="form-control" name="currentPwd" id="currentPwd" placeholder="현재 비밀번호"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>변경 비밀번호</label>
+                                        <input type="password" class="form-control" name="newPwd" id="newPwd" placeholder="변경 비밀번호"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>변경 비밀번호 확인</label>
+                                        <input type="password" class="form-control" name="newPwdConfirm" id="newPwdConfirm" placeholder="변경 비밀번호 확인"/>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="well well-sm well-primary">
+                                <p class="help-block">회사 로고 선택</p>
+                                <input type="file" class="btn btn-default" name="cImage" id="profile_cImage"
+                                       accept="image/gif, image/jpeg, image/png, image/jpg, image/bmp"
+                                       onchange="logoImageChange(this)"/>
+                                <img id="logoImg" style="max-width: 100%; max-height: 300px; margin-top: 15px">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="profile_cancel" class="btn btn-default" data-dismiss="modal">
+                    취소
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveProfile()">
+                    저장
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+</div>
+<!-- END MAIN PANEL -->
+
+<!-- PAGE FOOTER -->
+<div class="page-footer">
+    <div class="row">
+        <div class="col-xs-12 col-sm-10">
+            <span class="txt-color-white">DongSung Admin 1.0 ( Tel 080-007-0030 )<span class="hidden-xs"> - Developed by doStory © 2017 ~</span></span>
+        </div>
+        <!--
+        <div class="col-xs-6 col-sm-6 text-right hidden-xs">
+            <div class="txt-color-white inline-block">
+                <i class="txt-color-blueLight hidden-mobile">Last account activity <i class="fa fa-clock-o"></i> <strong>52 mins ago &nbsp;</strong> </i>
+                <div class="btn-group dropup">
+                    <button class="btn btn-xs dropdown-toggle bg-color-blue txt-color-white" data-toggle="dropdown">
+                        <i class="fa fa-link"></i> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right text-left">
+                        <li>
+                            <div class="padding-5">
+                                <p class="txt-color-darken font-sm no-margin">Download Progress</p>
+                                <div class="progress progress-micro no-margin">
+                                    <div class="progress-bar progress-bar-success" style="width: 50%;"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="padding-5">
+                                <p class="txt-color-darken font-sm no-margin">Server Load</p>
+                                <div class="progress progress-micro no-margin">
+                                    <div class="progress-bar progress-bar-success" style="width: 20%;"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="padding-5">
+                                <p class="txt-color-darken font-sm no-margin">Memory Load <span class="text-danger">*critical*</span></p>
+                                <div class="progress progress-micro no-margin">
+                                    <div class="progress-bar progress-bar-danger" style="width: 70%;"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="padding-5">
+                                <button class="btn btn-block btn-default">refresh</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>-->
+
+    </div>
+</div>
+<!-- END PAGE FOOTER -->
+
+<%- include('shortcut.html') -%>
+
+<!--================================================== -->
+
+<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+<script data-pace-options='{ "restartOnRequestAfter": true }' src="/javascripts/js/plugin/pace/pace.min.js"></script>
+
+<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    if (!window.jQuery) {
+        document.write('<script src="/javascripts/js/libs/jquery-2.1.1.min.js"><\/script>');
+    }
+</script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+    if (!window.jQuery.ui) {
+        document.write('<script src="/javascripts/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+    }
+</script>
+
+<!-- IMPORTANT: APP CONFIG -->
+<script src="/javascripts/js/app.config.js"></script>
+
+<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+<script src="/javascripts/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+<!-- BOOTSTRAP JS -->
+<script src="/javascripts/js/bootstrap/bootstrap.min.js"></script>
+
+<!-- CUSTOM NOTIFICATION -->
+<script src="/javascripts/js/notification/SmartNotification.min.js"></script>
+
+<!-- JARVIS WIDGETS -->
+<script src="/javascripts/js/smartwidgets/jarvis.widget.min.js"></script>
+
+<!-- EASY PIE CHARTS -->
+<script src="/javascripts/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+<!-- SPARKLINES -->
+<script src="/javascripts/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- JQUERY VALIDATE -->
+<script src="/javascripts/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+<!-- JQUERY MASKED INPUT -->
+<script src="/javascripts/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+<!-- JQUERY SELECT2 INPUT -->
+<script src="/javascripts/js/plugin/select2/select2.min.js"></script>
+
+<!-- JQUERY UI + Bootstrap Slider -->
+<script src="/javascripts/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+<!-- browser msie issue fix -->
+<script src="/javascripts/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+<!-- FastClick: For mobile devices -->
+<script src="/javascripts/js/plugin/fastclick/fastclick.min.js"></script>
+
+<!--[if IE 8]>
+
+<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+<![endif]-->
+
+<!-- MAIN APP JS FILE -->
+<script src="/javascripts/js/app.min.js"></script>
+
+<!-- 직접 추가 -->
+<script src="/javascripts/js/modal/jquery.modal.min.js"></script>   <!-- Modal -->
+<script src="https://cdn.jsdelivr.net/jquery.form/4.2.1/jquery.form.min.js" integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer" crossorigin="anonymous"></script>   <!-- jquery form -->
+
+<!-- 직접 구현 KaSha -->
+<script src="/javascripts/js/api/ajax.js"></script><!-- Ajax -->
+<script src="/javascripts/js/modal/modalApi.js"></script>   <!-- Modal -->
+<script src="/javascripts/js/api/common.js"></script><!-- Common -->
+<script src="/javascripts/js/api/autoTotal.js"></script>
+
+<script>
+    $(function(){
+        $('#left-panel').bind("resize", function () {
+            if($('body').hasClass("minified")){
+                $("#nav_cName").hide();
+                $("#nav_userID").hide();
+            }else{
+                $("#nav_cName").show();
+                $("#nav_userID").show();
+            }
+        });
+    });
+
+    //파일을 통한 로고 이미지 변경
+    function logoImageChange(obj){
+        if( !checkImageType(obj) ){
+            var img = document.getElementById("logoImg");
+            previewFromImageInput(obj, img);
+        }
+    };
+</script>
+</body>
+
+</html>
