@@ -1,0 +1,89 @@
+<%
+var session = typeof session=="undefined" ? null : session;
+
+%>
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+    <input type="hidden" id="cImageHidden">
+    <% if(session.uLevel == "관리자"){%>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="smart-form">
+                <fieldset>
+                    <section>
+                        <label class="select">
+                            <select class="input-sm" id="companySelect" onchange="getRoomTotalListAjax(this.value, '<%=session.uLevel%>');">
+                                <option value='0' selected='' disabled=''>회사명/대표명 선택</option>
+                            </select> <i></i> </label>
+                    </section>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <%}%>
+
+    <div class="row" id="listDiv">
+
+    </div>
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+
+<!-- PAGE RELATED PLUGIN(S) -->
+
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+
+    $(document).ready(function() {
+
+        pageSetUp();
+
+        getCompanyNameListAjax(function (data) {
+            var html = "";
+
+            $.each(data, function (index, item) {
+                html += "<option value='" + item.cID + "'>" + item.companyName + "</option>";
+            });
+
+            $("#companySelect").append(html);
+
+            <%if (session.uLevel == "관리자" && req.param("cID", "").length > 0) {%>
+                 $('#companySelect').val("<%=req.param("cID", "")%>");
+            <%}%>
+        });
+
+        <%if(session.uLevel == "사용자"){%>
+            getRoomTotalListAjax("<%=session.cID%>", "<%=session.uLevel%>");
+        <%} else if (session.uLevel == "관리자" && req.param("cID", "").length > 0) {%>
+            getRoomTotalListAjax("<%=req.param("cID", "")%>", '<%=session.uLevel%>');
+        <%}%>
+
+    })
+
+</script>
+
+<style>
+    .superbox{ min-height:150px; }
+</style>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>

@@ -1,0 +1,473 @@
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+    <% if(session.uLevel == "관리자"){%>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="smart-form">
+                    <fieldset>
+                        <section>
+                            <label class="select">
+                                <select class="input-sm" id="companySelect" onchange="getIpgwanList(this.value)">
+                                    <option value='0' selected='' disabled=''>회사명/대표명 선택</option>
+                                </select> </label>
+                        </section>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    <%}else if(session.uLevel == "사용자"){%>
+        <input type="hidden" name="companySelect" id="companySelect" value="<%=session.cID%>"/>
+    <%}%>
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-12 col-lg-3">
+
+            <div class="jarviswidget jarviswidget-color-blueDark">
+                <header>
+                    <h2> 입관 스케줄러 관리 </h2>
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <form class="smart-form">
+                        <header style="margin:0; font-weight: 400">입관실 선택</header>
+                        <section style="margin-top:10px">
+                            <select class="input-sm" id="ipgwanSelect" style="width:100%" onchange=""><!--$('#calendar').fullCalendar('refetchEvents');-->
+                                <option value='' selected disabled>입관실 선택</option>
+                            </select>
+                        </section>
+                    </form>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <select multiple="multiple" size="7" name="dualListbox" id="dualListbox"></select>
+                    </div>
+                    <!-- end widget content -->
+
+                    <button type="button" id="saveBtn" style="margin-bottom:10px" class="btn btn-primary btn-lg btn-block">저장</button>
+                </div>
+                <!-- end widget div -->
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-9">
+
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-blueDark">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                    <h2> 입관 스케줄러 </h2>
+                    <div class="widget-toolbar">
+                        <!-- add: non-hidden - to disable auto hide -->
+
+                        <div class="btn-group">
+                            <button class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown">
+                                달력 전환 <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu js-status-update pull-right">
+                                <li>
+                                    <a href="javascript:void(0);" id="mt">월간</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" id="ag">주간</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" id="td">일간</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <div class="widget-body no-padding">
+                        <!-- content goes here -->
+                        <div class="widget-body-toolbar">
+
+                            <div id="calendar-buttons">
+                                <button type="button" id="excelBtn" class="btn btn-primary" style="margin-right: 8px;">월간 기록 엑셀저장</button>
+                                <span id="counting"></span>
+                                <!--<input type="button">-->
+                                <div class="btn-group">
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="calendar"></div>
+
+                        <!-- end content -->
+                    </div>
+
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </div>
+
+    </div>
+
+    <!-- end row -->
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+
+<!-- PAGE RELATED PLUGIN(S) -->
+<script src="javascripts/js/plugin/moment/moment.min.js"></script>
+<script src="javascripts/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>
+<script src="javascripts/js/plugin/bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+
+<script type="text/javascript">
+
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+
+    $(document).ready(function() {
+
+        pageSetUp();
+
+        getCompanyNameListAjax(function (data) {
+            var html = "";
+
+            $.each(data, function (index, item) {
+                html += "<option value='" + item.cID + "'>" + item.companyName + "</option>";
+            });
+
+            $("#companySelect").append(html);
+        });
+
+        <%if(session.uLevel == "사용자"){%>
+            getIpgwanList("<%=session.cID%>");
+        <%}%>
+
+
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        var hdr = {
+            left: 'title',
+            center: 'month,agendaWeek,agendaDay',
+            right: 'prev,today,next'
+        };
+
+        var initDrag = function (e) {
+            // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+            // it doesn't need to have a start or end
+
+            var eventObject = {
+                title: $.trim(e.children().text()), // use the element's text as the event title
+                description: $.trim(e.children('span').attr('data-description')),
+                icon: $.trim(e.children('span').attr('data-icon')),
+                className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
+            };
+            // store the Event Object in the DOM element so we can get to it later
+            e.data('eventObject', eventObject);
+
+            // make the event draggable using jQuery UI
+            e.draggable({
+                zIndex: 999,
+                revert: true, // will cause the event to go back to its
+                revertDuration: 0 //  original position after the drag
+            });
+        };
+
+        var addEvent = function (title, priority, description, icon) {
+            title = title.length === 0 ? "Untitled Event" : title;
+            description = description.length === 0 ? "No Description" : description;
+            icon = icon.length === 0 ? " " : icon;
+            priority = priority.length === 0 ? "label label-default" : priority;
+
+            var html = $('<li><span class="' + priority + '" data-description="' + description + '" data-icon="' +
+                icon + '">' + title + '</span></li>').prependTo('ul#external-events').hide().fadeIn();
+
+            $("#event-container").effect("highlight", 800);
+
+            initDrag(html);
+        };
+
+        /* initialize the external events
+         -----------------------------------------------------------------*/
+
+        $('#external-events > li').each(function () {
+            initDrag($(this));
+        });
+
+        $('#add-event').click(function () {
+            var title = $('#title').val(),
+                priority = $('input:radio[name=priority]:checked').val(),
+                description = $('#description').val(),
+                icon = $('input:radio[name=iconselect]:checked').val();
+
+            addEvent(title, priority, description, icon);
+        });
+
+        /* initialize the calendar
+         -----------------------------------------------------------------*/
+
+        $('#calendar').fullCalendar({
+
+            defaultView: "month",   //month, basicWeek, basicDay, agendaWeek, agendaDay, listYear, listMonth, listWeek, listDay
+            header: hdr,
+            editable: false,
+            droppable: false, // this allows things to be dropped onto the calendar !!!
+            eventLimit: true,
+                // time formats
+                /*titleFormat: {
+                    month: 'YYYY년 MMMM',
+                    week: "YYYY년 MMMM d[ YYYY]{'일 ~'[ MMM] dd일 }",
+                    day: 'YYYY년 MMM d dddd'
+                },*/
+                timeFormat: { // for event elements
+                    month: 'HH:mm', // 월간
+                    //genda: 'HH:mm{ - HH:mm}' // 주간,일간
+                },
+
+                allDayText: '시간', // 주간,월간
+                axisFormat: 'hh:mm', // 주간,월간
+
+                monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+                monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+                dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+                dayNamesShort: ['일','월','화','수','목','금','토'],
+                buttonText: {
+                    prev: '&nbsp;&#9668;&nbsp;',
+                    next: '&nbsp;&#9658;&nbsp;',
+                    prevYear: '&nbsp;&lt;&lt;&nbsp;',
+                    nextYear: '&nbsp;&gt;&gt;&nbsp;',
+                    today: '오늘',
+                    month: '월간',
+                    week: '주간',
+                    day: '일간'
+                },
+                //selectable: true,
+                //selectHelper: true,
+
+            drop: function (date, allDay) { // this function is called when something is dropped
+
+                // retrieve the dropped element's stored Event Object
+                var originalEventObject = $(this).data('eventObject');
+
+                // we need to copy it, so that multiple events don't have a reference to the same object
+                var copiedEventObject = $.extend({}, originalEventObject);
+
+                // assign it the date that was reported
+                copiedEventObject.start = date;
+                copiedEventObject.allDay = allDay;
+
+                // render the event on the calendar
+                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+                // is the "remove after drop" checkbox checked?
+                if ($('#drop-remove').is(':checked')) {
+                    // if so, remove the element from the "Draggable Events" list
+                    $(this).remove();
+                }
+
+            },
+
+            select: function (start, end, allDay) {
+                var title = prompt('Event Title:');
+                if (title) {
+                    calendar.fullCalendar('renderEvent', {
+                            title: title,
+                            start: start,
+                            end: end,
+                            allDay: allDay
+                        }, true // make the event "stick"
+                    );
+                }
+                calendar.fullCalendar('unselect');
+            },
+
+            /** 이벤트 ajax 동적으로.
+            events: function(start, end, timezone, callback) {
+                $.ajax({
+                    url: '/scheduler/schedulerList',
+                    type : 'GET',
+                    data : {startDate : start.format(), endDate : end.format(), requestCID : function () {return $("#companySelect").val();} },
+                    dataType: 'json',
+                    success: function(data) {
+                        var events = [];
+                        $(data.data).each(function() {
+                            events.push({
+                                title: $(this).attr('gName'),
+                                description: $(this).attr('rName'),
+                                start: $(this).attr('ipgwan'),
+                                end: $(this).attr('barin'),
+                                className: ["event", "bg-color-blue"],
+                                icon: 'fa-clock-o'
+                            });
+                        });
+                        callback(events);
+                    }
+                });
+
+            },*/
+
+            loading: function(bool) {
+                //$('#loading').toggle(bool);
+            },
+
+            eventRender: function (event, element, icon) {
+                if (!event.description == "") {
+                    element.find('.fc-title').append("<br/><span class='ultra-light'>" + event.description +
+                        "</span>");
+                }
+                if (!event.icon == "") {
+                    element.find('.fc-title').append("<i class='air air-top-right fa " + event.icon +
+                        " '></i>");
+                }
+            },
+
+            windowResize: function (event, ui) {
+                $('#calendar').fullCalendar('render');
+            },
+
+            viewRender : function(view, element) {
+                if (view.intervalUnit === "month") {
+                    $("#excelBtn").show();
+                } else {
+                    $("#excelBtn").hide();
+                }
+                console.log(view);
+                console.log(element);
+            }
+        });
+
+        /* hide default buttons */
+        $('.fc-right, .fc-center').hide();
+
+
+        $('#calendar-buttons #btn-prev').click(function () {
+            $('.fc-prev-button').click();
+            return false;
+        });
+
+        $('#calendar-buttons #btn-next').click(function () {
+            $('.fc-next-button').click();
+            return false;
+        });
+
+        $('#calendar-buttons #btn-today').click(function () {
+            $('.fc-today-button').click();
+            return false;
+        });
+
+        $('#mt').click(function () {
+            $('#calendar').fullCalendar('changeView', 'month');
+        });
+
+        $('#ag').click(function () {
+            $('#calendar').fullCalendar('changeView', 'agendaWeek');
+        });
+
+        $('#td').click(function () {
+            $('#calendar').fullCalendar('changeView', 'agendaDay');
+        });
+
+        /*
+         * BOOTSTRAP DUALLIST BOX
+         */
+
+        var initializeDuallistbox = $('#dualListbox').bootstrapDualListbox({
+            nonSelectedListLabel: '미선택 분향실',
+            selectedListLabel: '선택 분향실',
+            preserveSelectionOnMove: 'moved',
+            moveOnSelect: false
+        });
+
+        /*
+         * API
+         */
+
+        $("#dualListbox").change(function () {
+            var events = [];
+
+            $(this).find("option:selected").each(function (index, element) {
+                if(Date.parse($(element).attr("end")) && Date.parse($(element).attr("start"))) {
+                    events.push({
+                        title: $(element).attr("title"),
+                        description: $(element).attr("description"),
+                        start: $(element).attr("start"),
+                        end: $(element).attr("end"),
+                        className: ["event", "bg-color-blue"],
+                        icon: 'fa-clock-o'
+                    });
+                }
+            });
+
+            $("#calendar").fullCalendar('removeEvents');
+            $("#calendar").fullCalendar("addEventSource", events);
+        });
+
+        $("#saveBtn").click(function () {
+            var optionLength = $("#dualListbox").find("option").length;
+            if(optionLength == 0) return ;  //옵션에 전체 분향실이 없으면 saveBtn 무시.
+
+            var selectedValue = [];
+            $("#dualListbox").find("option:selected").each(function (index, element) {
+                selectedValue.push($(element).val());
+            });
+
+            insertIpgwanSchduler($("#ipgwanSelect").val(), selectedValue);
+        });
+
+        $("#companySelect").change(function () {
+            $("#dualListbox").empty();
+            $("#dualListbox").bootstrapDualListbox('refresh', true);
+            $("#calendar").fullCalendar('removeEvents');
+        });
+
+        $("#excelBtn").click(function () {
+            var currentDate = $('#calendar').fullCalendar("getDate");
+
+            <% if(session.uLevel == "관리자"){%>
+                if ($("#companySelect").val().length <= 0){
+                    return;
+                }
+                window.location = "/scheduler/excelMonth?cID=" + $("#companySelect").val() + "&startDate=" + currentDate.format('YYYY-MM-01');
+            <%} else {%>
+                window.location = "/scheduler/excelMonth?cID=<%=session.cID%>&startDate=" + currentDate.format('YYYY-MM-01');
+            <%}%>
+
+        });
+    })
+</script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>빈소 테이블</title>
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        if (!window.jQuery) {
+            document.write('<script src="/javascripts/js/libs/jquery-2.1.1.min.js"><\/script>');
+        }
+    </script>
+    <!--<script src="/javascripts/js/plugin/stacktable/stacktable.js"></script>-->
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="/stylesheets/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/stylesheets/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/css/stacktable.css">-->
+
+    <style>
+        .stacktable { width: 100%; }
+        .st-head-row { padding-top: 1em; }
+        .st-head-row.st-head-row-main { font-size: 1.5em; padding-top: 0; }
+        .st-key { width: 49%; text-align: right; padding-right: 1%; }
+        .st-val { width: 49%; padding-left: 1%; }
+
+        /* RESPONSIVE */
+        .stacktable.large-only { display: table; }
+        .stacktable.small-only { display: none; }
+
+        @media (max-width: 800px) {
+            .stacktable.large-only { display: none; }
+            .stacktable.small-only { display: table; }
+        }
+
+        h2 {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        table caption {
+            padding: .5em 0;
+        }
+
+        .p {
+            text-align: center;
+            padding-top: 140px;
+            font-size: 14px;
+        }
+
+        table img{
+            max-width: 100px;
+        }
+
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+            padding-left: 1px;
+            padding-right: 1px;
+        }
+
+        #title {
+            height: 87px;
+            background: url(/stylesheets/img/roomTable/flower.png) 20% 0 no-repeat;
+            background-size: 150px 87px;
+            min-height: 87px;
+            text-align: center;
+            padding-top: 30px;
+        }
+        #roomTable td {
+            word-wrap: break-word;
+            word-break: keep-all;
+            white-space: pre-wrap;
+            vertical-align: middle;
+        }
+        table {
+            background: url(/stylesheets/img/roomTable/tableBackground.jpeg) 0 100% no-repeat;
+            background-size: 100%;
+        }
+        th{
+            background-color: #f5f5f5;
+        }
+        td, th, tr, .table-bordered{
+            border-color: #9e9e9f !important;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+//            $('table').stacktable();
+            var rate = document.body.offsetWidth / document.getElementById("roomTable").offsetWidth;
+            if(rate < 1){
+                document.body.style.zoom = rate * 0.8;
+            }
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <h1 id="title">삼가 고인의 명복을 빕니다.</h1>
+                <table id="roomTable" class="table table-bordered table-hover">
+                    <!--<caption class="text-center">빈소 테이블</caption>-->
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="width: 4%">번 호</th>
+                        <th class="text-center" style="width: 10%">빈 소 명</th>
+                        <th class="text-center" style="width: 10%">고 인</th>
+                        <th class="text-center" style="width: 10%">고인 사진</th>
+                        <th class="text-center" style="width: 26%">상 주</th>
+                        <th class="text-center" style="width: 20%">장 지</th>
+                        <th class="text-center" style="width: 10%">입관 일시</th>
+                        <th class="text-center" style="width: 10%">발인 일시</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <% data.forEach(function (element, index) { %>
+                            <tr>
+                                <td class="text-center"><%=index + 1%></td>
+                                <td class="text-center"><%=element.rName%></td>
+                                <td class="text-center"><%=element.gName%></td>
+                                <td><img src="<%=element.gImage.length > 0 ? '/upload/guest/' + element.gImage : '/images/user.jpg'%>"></td>
+                                <td><%=element.gSangJu%></td>
+                                <td class="text-center"><%=element.jangji%></td>
+                                <td class="text-center"><%=element.ipgwan.substring(5,16)%></td>
+                                <td class="text-center"><%=element.barin.substring(5,16)%></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                    <!--<tfoot>-->
+                    <!--<tr>-->
+                        <!--<td colspan="8" class="text-center">빈소테이블</td>-->
+                    <!--</tr>-->
+                    <!--</tfoot>-->
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

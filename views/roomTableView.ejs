@@ -1,0 +1,76 @@
+<%
+var session = typeof session=="undefined" ? null : session;
+
+%>
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+    <% if(session.uLevel == "관리자"){%>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="smart-form">
+                <fieldset>
+                    <section>
+                        <label class="select">
+                            <select class="input-sm" id="companySelect" onchange="changeRoomTableFrame(this.value);">
+                                <option value='0' selected='' disabled=''>회사명/대표명 선택</option>
+                            </select> <i></i> </label>
+                    </section>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <%}%>
+    <br>
+
+    <div class="row" id="contentDiv">
+        <span id="link"></span>
+        <iframe id="roomTableFrame" onload="autoResize(this)" scrolling="no" frameborder="0"></iframe>
+    </div>
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+<style>
+    #contentDiv {
+        width: 100%;
+    }
+    #roomTableFrame{
+        width: 100%;
+        overflow: hidden;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        pageSetUp();
+
+        getCompanyNameListAjax(function (data) {
+            var html = "";
+
+            $.each(data, function (index, item) {
+                html += "<option value='" + item.cID + "'>" + item.companyName + "</option>";
+            });
+
+            $("#companySelect").append(html);
+        });
+
+        <%if(session.uLevel == "사용자"){%>
+        changeRoomTableFrame("<%=session.cID%>");
+        <%}%>
+    });
+
+    function changeRoomTableFrame(cID){
+        $("#roomTableFrame").attr("src", "/roomTable?cID=" + cID);
+        $("#link").text("http://diostory.com:3000/roomTable?cID=" + cID);
+    }
+
+    function autoResize(element) {
+        var iframeHeight = element.contentWindow.document.body.scrollHeight;
+        element.height=iframeHeight;
+    }
+</script>
