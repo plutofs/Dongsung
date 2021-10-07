@@ -1,0 +1,276 @@
+<%
+var session = typeof session=="undefined" ? null : session;
+
+%>
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+    <input type="hidden" id="cImageHidden"/>
+    <% if(session.uLevel == "관리자"){%>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="smart-form">
+                <fieldset>
+                    <section>
+                        <label class="select">
+                            <select class="input-sm" id="companySelect" onchange="getRoomWithCategoryAjax(this.value, '<%=session.uLevel%>');">
+                                <option value='0' selected='' disabled=''>회사명/대표명 선택</option>
+                            </select> <i></i> </label>
+                    </section>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <%}%>
+    <input type="hidden" id="hiddenCID"/>
+    <div id="listDiv">
+
+    </div>
+
+</div>
+<!-- end content -->
+
+<style>
+    .superbox-img {height:230px}
+    .superbox-img p {position: absolute; left: 0; right: 0;}
+    .superbox-img p:nth-of-type(1) {top: 18%; font-size: 28px;}
+    .superbox-img p:nth-of-type(2) {top: 35%; font-size: 20px;}
+    .superbox-img p:nth-of-type(3) {top: 48%; font-size: 16px;}
+    .superbox-img p:nth-of-type(4) {top: 72%; font-size: 15px;}
+    .superbox-img p:nth-of-type(5) {top: 82%; font-size: 15px;}
+</style>
+
+<%- include('footer.html') -%>
+
+<!-- PAGE RELATED PLUGIN(S) -->
+<script src="javascripts/js/plugin/superbox/superbox.min.js"></script>
+<script src="javascripts/js/api/drag.js"></script>
+
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+
+    var categoryListLength;
+    var categoryCookieObject = {"categoryName" : []};
+
+    $(document).ready(function() {
+
+        pageSetUp();
+
+        getCompanyNameListAjax(function (data) {
+            var html = "";
+
+            $.each(data, function (index, item) {
+                html += "<option value='" + item.cID + "'>" + item.companyName + "</option>";
+            });
+
+            $("#companySelect").append(html);
+
+            <%if (session.uLevel == "관리자" && req.param("cID", "").length > 0) {%>
+                $('#companySelect').val("<%=req.param("cID", "")%>");
+            <%}%>
+        });
+
+        <%if(session.uLevel == "사용자"){%>
+            getRoomWithCategoryAjax("<%=session.cID%>", '<%=session.uLevel%>');
+        <%} else if (session.uLevel == "관리자" && req.param("cID", "").length > 0) {%>
+            getRoomWithCategoryAjax("<%=req.param("cID", "")%>", '<%=session.uLevel%>');
+        <%}%>
+
+        $(".rName-edit").click(function(e) {
+
+            $.SmartMessageBox({
+                title : "Smart Alert: Input",
+                content : "Please enter your user name",
+                buttons : "[Accept]",
+                input : "text",
+                placeholder : "Enter your user name"
+            }, function(ButtonPress, Value) {
+                alert(ButtonPress + " " + Value);
+            });
+
+            e.preventDefault();
+        });
+
+        document.addEventListener("drop", function (event) {
+            event.preventDefault();
+
+            if($(event.target).hasClass("roomArea")){
+                dragDrop(event);
+            }else if($(event.target).hasClass("superbox")){
+                dragDrop(event);
+            }
+        });
+    })
+
+    function slideCategory(element, arrow) {
+        var categoryName = $(arrow).parent().parent().text();
+        if(element.is(":visible")) {
+            arrow.className = "fa fa-chevron-down";
+            element.slideUp("slow");
+            if(categoryCookieObject.categoryName.indexOf(categoryName) <= 0){
+                categoryCookieObject.categoryName.push(categoryName);
+                setCookie("roomCategory", JSON.stringify(categoryCookieObject), 9999);
+            }
+        }else{
+            arrow.className = "fa fa-chevron-up";
+            element.slideDown("slow");
+            if(categoryCookieObject.categoryName.indexOf(categoryName) >= 0){
+                categoryCookieObject.categoryName.splice(categoryCookieObject.categoryName.indexOf(categoryName), 1);
+                setCookie("roomCategory", JSON.stringify(categoryCookieObject), 9999);
+            }
+
+        }
+    }
+
+    function initSlidedCategory(){
+        var cookie = getCookie("roomCategory");
+        if(cookie.length > 0){
+            categoryCookieObject = JSON.parse(cookie);
+            if(typeof categoryCookieObject != "undefinded"){
+                var categoryNameArray = categoryCookieObject.categoryName;
+                var categoryNameElement = $(".categoryName");
+                for(var i = 0; i < categoryNameElement.size(); i++){
+                    if(jQuery.inArray(categoryNameElement[i].innerText, categoryNameArray) >= 0){
+                        console.log($(categoryNameElement[i]).find("a")[0]);
+                        $($(categoryNameElement[i]).find("a")[0]).find("i").click();
+                    }
+                }
+            }
+        }
+
+        console.log(categoryCookieObject);
+    }
+
+    /*function addCategory() {      //DEPRECATED
+        var index = categoryListLength;
+
+        if(document.getElementById("inputCategoryDiv")){    //이미 생성되어 있으면
+            $("#categoryName").select();
+            return;
+        }
+
+        var html =
+            "<div class='row hidden-mobile' id='inputCategoryDiv'>" +
+            "<div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>" +
+            "<h1 class='page-title txt-color-blueDark'>" +
+            "<i class='fa-fw fa fa-puzzle-piece'></i>" +
+            "<form class='smart-form' onsubmit='return false;'>" +
+            "<label class='input'> <i class='icon-append fa fa-question-circle'></i>" +
+            "<input type='text' placeholder='카테고리 이름' id='categoryName'>" +
+            "<b class='tooltip tooltip-right'>" +
+            "<i class='fa fa-warning txt-color-teal'></i>" +
+            "카테고리 이름을 입력 후 확인키를 눌러주세요</b>" +
+            "</label>" +
+            "</form>" +
+            "</h1>" +
+            "</div>" +
+            "</div>";
+
+        $("#listDiv").append(html).trigger("create");
+
+
+        var categoryName = $("#categoryName");
+        categoryName.keypress(function (e) {
+            if(e.keyCode==13 && !categoryName.val().length>0){   //not enter text
+                alert("카테고리 이름을 입력해주세요");
+            } else if (e.keyCode==13){  //ENTER
+                <%if(session.uLevel == "관리자"){%>
+                insertCategory($("#companySelect").val(), categoryName.val(), categoryListLength);
+                <%}else if(session.uLevel == "사용자"){%>
+                insertCategory('<%=session.cID%>', categoryName.val(), categoryListLength);
+                <%}%>
+            }
+        });
+
+        categoryName.select();
+    }*/
+
+    function getCategoryName() {
+        $.SmartMessageBox({
+            title : "분향실 카테고리 추가",
+            content : "카테고리 이름을 입력해 주세요.",
+            buttons : "[완료][취소]",
+            input : "text",
+            placeholder : "카테고리 이름"
+        }, function(ButtonPress, Value) {
+            switch (ButtonPress){
+                case "완료" :
+                    if(Value == "기본 카테고리"){
+                        smallNotification("실패!", "해당 카테고리 명은 사용할수 없습니다.", 0);
+                        return;
+                    }
+
+                    <%if(session.uLevel == "관리자"){%>
+                        insertCategory($("#companySelect").val(), Value, categoryListLength);
+                    <%}else if(session.uLevel == "사용자"){%>
+                        insertCategory('<%=session.cID%>', Value, categoryListLength);
+                    <%}%>
+                    break;
+                case "취소" :
+                    return;
+            }
+        });
+
+        e.preventDefault();
+    };
+
+    function categoryNameChange(rcID, index){
+        $.SmartMessageBox({
+            title : "카테고리 이름 변경",
+            content : "카테고리 이름을 입력해 주세요.",
+            buttons : "[완료][취소]",
+            input : "text",
+            placeholder : "카테고리 이름"
+        }, function(ButtonPress, Value) {
+            switch (ButtonPress){
+                case "완료" :
+                    if(Value == "기본 카테고리"){
+                        smallNotification("실패!", "해당 카테고리 명은 사용할수 없습니다.", 0);
+                        return;
+                    }
+
+                    change_rcName(rcID, Value, index);
+                    break;
+                case "취소" :
+                    return;
+            }
+        });
+
+        e.preventDefault();
+    };
+
+    function deleteCategory(rcID, index){
+        var div = document.getElementById("rowDiv" + index).getElementsByClassName("superbox-list");
+
+        if(div.length > 0){
+            smallNotification("실패!", "카테고리 안에는 분향실이 없어야 합니다.", 0);
+        }else{
+            removeCategory(rcID, index);
+        }
+    }
+</script>
+
+<style>
+.superbox{ min-height:150px;}
+#previewDiv{background-color: white}
+.modal-text{ white-space: pre-wrap; }
+</style>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>

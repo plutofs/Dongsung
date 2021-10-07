@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>찾아오는 길</title>
+
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        if (!window.jQuery) {
+            document.write('<script src="/javascripts/js/libs/jquery-2.1.1.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- 네이버 지도 -->
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=sp9mLN5lpV6FGo1hcddv&submodules=geocoder"></script>
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="/stylesheets/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/stylesheets/img/favicon/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/css/init.css">
+    <style>
+        #map{ min-height:350px}
+    @media (max-width:650px){
+        body{
+            width:100%;
+            margin:0 auto
+        }
+        body > div{
+            background:url(/stylesheets/img/invitation/bg.png)no-repeat 0 0;
+            width:100%;
+            font-size:20px;
+            background-size:100%
+        }
+        header{
+            text-align:center;
+            padding-bottom:35px
+        }
+        header img{
+            width:85px;
+            margin-top:50px;
+
+        }
+        header p{
+            line-height:1.8;
+            font-size:46px;
+            padding-top:15px
+        }
+        header > p > span:nth-of-type(1){
+            font-size:46px;
+        }
+        header > p > span:nth-of-type(2){
+            font-size:20px
+        }
+        .container{
+            width:90%;
+            height:auto;
+            margin:0 auto;
+        }
+        .container > ul{
+            width:100%;
+            margin:0 auto;
+            border-top:2px solid #eee
+        }
+        .container > ul:nth-of-type(1){
+            display:table
+        }
+        .container > ul:nth-of-type(1) > li{
+            display:table-cell;
+            height:150px;
+            vertical-align:middle;
+            float:none;
+            width:79.9%
+        }
+        .container > ul:nth-of-type(3){
+            border-bottom:1px solid #eee
+        }
+        .container > ul > li{
+            float:left;
+
+        }
+        .container > ul:nth-of-type(2) > li,
+        .container > ul:nth-of-type(3) > li{
+            padding:35px 0;
+            width:79.9%
+        }
+        .container > ul:after{
+            clear:both;display:block;content:'';
+        }
+        .container > ul > li:nth-of-type(1){
+            width:20%
+        }
+        .footer > div{
+            width:100%;
+            height: auto;
+            margin:0 auto;
+            padding-top:25px
+        }
+        .footer p{
+            text-align:center;
+            background-color:#444;
+            width:90%;
+            margin:30px auto
+        }
+        .footer p a{
+            color:#eee;
+            padding:25px 0;
+            display:block
+        }
+    }
+    @media (min-width:651px){
+        body{
+            width:650px;
+            margin:0 auto
+        }
+        body > div{
+            background:url(/stylesheets/img/invitation/bg.png)no-repeat 0 0;
+            width:100%;
+            font-size:20px;
+            background-size:100%
+        }
+        header{
+            text-align:center;
+            padding-bottom:35px
+        }
+        header img{
+            width:85px;
+            margin-top:50px;
+
+        }
+        header p{
+            line-height:1.8;
+            font-size:46px;
+            padding-top:15px
+        }
+        header > p > span:nth-of-type(1){
+            font-size:46px;
+        }
+        header > p > span:nth-of-type(2){
+            font-size:20px
+        }
+        .container{
+            width:90%;
+            height:auto;
+            margin:0 auto;
+        }
+        .container > ul{
+            width:100%;
+            margin:0 auto;
+            border-top:2px solid #eee
+        }
+        .container > ul:nth-of-type(1){
+            display:table
+        }
+        .container > ul:nth-of-type(1) > li{
+            display:table-cell;
+            height:150px;
+            vertical-align:middle;
+            float:none;
+            width:79.9%
+        }
+        .container > ul:nth-of-type(3){
+            border-bottom:1px solid #eee
+        }
+        .container > ul > li{
+            float:left;
+
+        }
+        .container > ul:nth-of-type(2) > li,
+        .container > ul:nth-of-type(3) > li{
+            padding:35px 0;
+            width:79.9%
+        }
+        .container > ul:after{
+            clear:both;display:block;content:'';
+        }
+        .container > ul > li:nth-of-type(1){
+            width:20%
+        }
+        .footer > div{
+            width:100%;
+            height: auto;
+            margin:0 auto;
+            padding-top:25px
+        }
+        .footer p{
+            text-align:center;
+            background-color:#444;
+            width:90%;
+            margin:30px auto
+        }
+        .footer p a{
+            color:#eee;
+            padding:25px 0;
+            display:block
+        }
+
+    }
+    </style>
+</head>
+
+    <body id='body' onload=''>
+        <div>
+            <header>
+                <img src='/stylesheets/img/invitation/ribbon.png' alt=''/><p>故 <span id="gName"></span>님<br/><span>삼가 고인의 명복을 빕니다.</span></p>
+            </header>
+            <div class='container'>
+                <ul>
+                    <li>상주</li>
+                    <li id='gSangJu'></li>
+                </ul>
+                <!--<ul>
+                <li>고인과의 관계</li>
+                <li id='grelation'>ㅇㅇㅇ</li>
+                    </ul>-->
+                <!--<ul>-->
+                    <!--<li>입관</li>-->
+                    <!--<li><span id='ipgwanDate'></span> <span id='barinTime'></span></li>-->
+                <!--</ul>-->
+                <ul>
+                    <li>발인</li>
+                    <li><span id='barinDate'></span> <span id='barinTime'></span></li>
+                </ul>
+                <ul>
+                    <li>식장</li>
+                    <li id='addr'></li>
+                </ul>
+            </div>
+            <div class='footer'>
+                <div id="map">
+                    <!--<a href="http://map.naver.com/?query=경기도 성남시 분당구 분당동 117-9 3층" target="_blank">-->
+                    <!--<img src="http://prt.map.naver.com/mashupmap/print?key=p1501486262454_1395923298" width="580" height="500" alt="지도 크게 보기" title="지도 크게 보기" border="0" style="vertical-align:top;"/>-->
+                    <!--</a>-->
+                    <!--<p><a id="" href="http://map.naver.com/?query=경기도 성남시 분당구 분당동 117-9 3층" target="_blank">네이버로 길 찾기</a></p>-->
+                </div>
+                <p id="mapButtonArea"><a id="mapButton" target="_blank">네이버로 길 찾기</a></p>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        function setName(gName){  //상주
+            var element = document.getElementById("gName");
+            if (typeof(element) != 'undefined' && element != null){
+                element.innerText = gName;
+            }
+        }
+
+        function setSangJu(gSangJu){  //상주
+            var element = document.getElementById("gSangJu");
+            if (typeof(element) != 'undefined' && element != null){
+                element.innerText = gSangJu;
+            }
+        }
+
+        function setIpgwanDate(value){ //파라미터 형식 YYYY-MM-DD
+            var date = new Date(value);
+            var ipgwanDate = date.getFullYear() + "년 " + (date.getMonth()+1) + "월 " + date.getDate() + "일";
+
+            if(isNaN(date)){  //value가 정확하지 않을때
+                document.getElementById("ipgwanDate").innerText = "";
+            }else{
+                document.getElementById("ipgwanDate").innerText = ipgwanDate;
+            }
+        }
+
+        function setIpgwanTime(value){   //파라미터 형식 HH:MM
+            var ary = value.split(":");
+            var ipgwanTime = "";
+            if(isNaN(ary[0]) || isNaN(ary[1])){ //value가 정확하지 않을때
+                ipgwanTime = "";
+            }else{
+                var tmp1 = Number(ary[0]), tmp2 = Number(ary[1]);
+                var hours = tmp1<10 ? "0" + tmp1 : tmp1, minutes = tmp2<10 ? "0" + tmp2 : tmp2;
+                var timeType = hours > 12 ? 1 : 0;
+                ipgwanTime = "(" + (timeType==0 ? "오전  " + hours : "오후  " + (hours - 12)) + ":" + minutes + ")";
+            }
+            document.getElementById("ipgwanTime").innerText = ipgwanTime;
+        }
+
+        function setBarinDate(value){ //파라미터 형식 YYYY-MM-DD
+            var date = new Date(value);
+            var barinDate = date.getFullYear() + "년 " + (date.getMonth()+1) + "월 " + date.getDate() + "일";
+
+            if(isNaN(date)){  //value가 정확하지 않을때
+                document.getElementById("barinDate").innerText = "";
+            }else{
+                document.getElementById("barinDate").innerText = barinDate;
+            }
+        }
+
+        function setBarinTime(value){   //파라미터 형식 HH:MM
+            var ary = value.split(":");
+            var barinTime = "";
+            if(isNaN(ary[0]) || isNaN(ary[1])){ //value가 정확하지 않을때
+                barinTime = "";
+            }else{
+                var tmp1 = Number(ary[0]), tmp2 = Number(ary[1]);
+                var hours = tmp1<10 ? "0" + tmp1 : tmp1, minutes = tmp2<10 ? "0" + tmp2 : tmp2;
+                var timeType = hours > 12 ? 1 : 0;
+                barinTime = "(" + (timeType==0 ? "오전  " + hours : "오후  " + (hours - 12)) + ":" + minutes + ")";
+            }
+            document.getElementById("barinTime").innerText = barinTime;
+        }
+
+        function setCompanyAddress(addr){  //식장
+            var element = document.getElementById("addr");
+            if (typeof(element) != 'undefined' && element != null){
+                element.innerText = addr + "<%=data[0].rName%>";
+            }
+
+            var mapButton = document.getElementById("mapButton");
+            mapButton.setAttribute("href", "http://map.naver.com/?query=" + addr);
+
+            var map = new naver.maps.Map('map');
+            var myaddress = addr;// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
+            naver.maps.Service.geocode({address: myaddress}, function(status, response) {
+                if (status !== naver.maps.Service.Status.OK) {
+                    //return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+                    document.getElementById("map").style.display = "none";
+                    document.getElementById("mapButtonArea").style.display = "none";
+                    return ;
+                }
+                var result = response.result;
+                // 검색 결과 갯수: result.total
+                // 첫번째 결과 결과 주소: result.items[0].address
+                // 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
+                var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+                map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+                // 마커 표시
+                var marker = new naver.maps.Marker({
+                    position: myaddr,
+                    map: map
+                });
+                // 마커 클릭 이벤트 처리
+                naver.maps.Event.addListener(marker, "click", function(e) {
+                    if (infowindow.getMap()) {
+                        infowindow.close();
+                    } else {
+                        infowindow.open(map, marker);
+                    }
+                });
+                // 마크 클릭시 인포윈도우 오픈
+                var infowindow = new naver.maps.InfoWindow({
+                    content: '<h4> [네이버 개발자센터]</h4><a href="https://developers.naver.com" target="_blank"><img src="https://developers.naver.com/inc/devcenter/images/nd_img.png"></a>'
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            <%console.log(data[0].gName);%>
+            setName("<%=data[0].gName%>");
+            setSangJu("<%=data[0].gSangJu.replace(/\n|\r\n|\r/g, '\\n')%>");
+
+            var barin = new Date('<%=data[0].barin%>');
+            if(!isNaN(barin)){
+                setBarinDate(barin);
+                setBarinTime(("0" + barin.getHours()).slice(-2) + ":" + ("0" + barin.getMinutes()).slice(-2));
+            }
+
+            setCompanyAddress("<%=data[0].cAddress%>");
+        });
+    </script>
+</html>

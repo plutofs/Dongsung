@@ -1,0 +1,206 @@
+<html lang="ko">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<title>total3-1</title> <!--파일명 넣기 (.html빼고)-->
+<link rel="stylesheet" type="text/css" href="init.css">
+<link rel="stylesheet" type="text/css" href="total.css">
+<style>
+  body{
+    background: url(img/bg2.jpg)no-repeat 100% 50%;
+    background-size: cover;
+    }
+  .wrap{
+    padding:0
+  }
+  /*헤더*/
+  .header{
+    background-color:#2b3745;
+    height: 10%;
+    text-align: center;
+    font-size: 4vw;
+    color:#fff;
+    position: relative;
+  }
+  .left, .right, .center{
+    height:100%;
+    float:left;
+  }
+  .gArrow{
+    position:relative;
+    float:left
+  }
+  .left{
+    width:35%;
+  }
+  .col1{
+    text-align: center;
+    padding: 0 0.5vw;
+  }
+  .right{
+    width:60%;
+  }
+  .gArrow{
+    padding:2vh;
+  }
+  /*중앙*/
+  .content{
+    width:100%;
+    height: 69%;
+  }
+  .gNameRoot{
+    box-sizing: border-box;
+    width:100%;
+    border-bottom:2px solid #2b3745;
+    height:13%
+  }
+  .col3{
+    /* float:left; */
+    width:100%
+  }
+  .gNameContainer{
+    text-align: center
+  }
+  .gNameContainer {
+    font-size:4vw
+  }
+  .content_1{
+    float: left;
+    width: 70%;
+    border-left: 2px solid #2b3745;
+  }
+  .sangjuContainer{
+    box-sizing: border-box;
+  }
+  .imageRoot{
+    width: 30%;
+    height: 100%;
+    float: left;
+  }
+
+  .sangjuRoot{
+    height:87%;
+    font-size: 6vw;
+  }
+  /*아래*/
+  .footer{
+    height: 22%;
+    border-top: 2px solid #2b3745;
+  }
+  .ipgwan > div,.barin > div,.jangji > div{
+    float:left
+  }
+  .ipgwan > div:first-of-type,
+  .barin > div:first-of-type{
+    background-color:#2b3745;
+    height: 101%;
+    width: 35%;
+    display: table;
+    color: #fff;
+    font-size: 3vw;
+  }
+  .jangji > div:first-of-type{
+    background-color:#2b3745;
+    height: 100%;
+    width: 31%;
+    display: table;
+    color: #fff;
+    font-size: 3vw;
+  }
+  .ipgwan > div:last-of-type,
+  .barin > div:last-of-type{
+    height: 100%;
+    width: 65%;
+  }
+  .jangji > div:last-of-type{
+    height: 100%;
+    width: 69%;
+  }
+  .ipgwantxt,.barintxt,.jangjitxt{
+    display: table;
+    width: 100%;
+    height: 100%;
+    font-size: 3vw;
+  }
+  .ipbar{
+    float:left;
+    width:50%;
+    height:100%;
+  }
+  .ipgwan,.barin{
+    width:100%;
+    height:50%;
+    float:left
+  }
+  .ipgwan{
+    border-bottom:2px solid #2b3745
+  }
+  .jangji{
+    float:left;
+    width:50%;
+    height:100%
+  }
+  .image{
+    background-color:#fff;
+  }
+
+  .sangjuContainer{
+    font-size: 5vw;
+    padding:0
+  }
+  .col4{
+    /* font-size: 5vh; */
+  }
+</style>
+<script>
+  const MAX_CNT = 1; //템플릿 최대갯수
+  const SANGJU_MAX_CNT = 20; //상주 최대 라인수.
+  const JANGJI_MAX_CNT = 3; //장지 최대 라인수.
+  const LOOP_MAX_CNT = 100; //글자크기 조절 반복분 루프 max 횟수
+  var currentCnt = 0; //추가되어있는 갯수
+</script>
+<script src="./total.js"></script>
+</head>
+
+<body id="body" onload="">
+  <div class='wrap row'>
+    <div class='header'>
+      <div class='left container'><p class="containerText col1"></p></div>
+      <img class="gArrow" src=''/>
+    </div>
+    <div class='content'>
+      <div class="imageRoot">
+        <div class='image'>
+          <img src='./img/user.jpg' class="mainImg"/>
+        </div>
+      </div>
+      <div class="content_1">
+        <div class='gNameRoot'><div class="gNameContainer"><p><span class="deco">故</span>&nbsp;<span class="col2"></span>&nbsp;<span class="col7"></span></p></div></div>
+        <div class='sangjuRoot'>
+          <div class='sangjuContainer'>
+              <p class="col3"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='footer'>
+      <div class='ipbar'>
+        <div class='ipgwan'>
+          <div><p class='text'>입 관(入棺)</p></div>
+          <div><div class='ipgwantxt'><p class='text col5'></p></div></div>
+        </div>
+        <div class='barin'>
+          <div><p class='text'>발 인(發靷)</p></div>
+          <div><div class='barintxt'><p class='text col6'></p></div></div>
+        </div>
+      </div>
+      <div class='jangji'>
+        <div><p class='text'>장 지(葬地)</p></div>
+        <div class="jangjiRoot"><div class='jangjitxt jangjiContainer'><p class='col4 text'></p></div></div>
+      </div>
+    </div>
+</div>
+</body>
+</html>

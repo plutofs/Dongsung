@@ -1,0 +1,320 @@
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+
+    <!--
+    The ID "widget-grid" will start to initialize all widgets below
+    You do not need to use widgets if you dont want to. Simply remove
+    the <section></section> and you can use wells or panels instead
+    -->
+
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+
+        <!-- row -->
+        <div class="row" style="not(.smart-style-6)">
+
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <table id="jqgrid"></table>
+                <div id="pjqgrid"></div>
+            </article>
+            <!-- WIDGET END -->
+
+        </div>
+
+        <!-- end row -->
+
+    </section>
+    <!-- end widget grid -->
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+
+<!-- PAGE RELATED PLUGIN(S) -->
+
+<script src="javascripts/js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="javascripts/js/plugin/jqgrid/grid.locale-en.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        pageSetUp();
+
+        jQuery("#jqgrid").jqGrid({
+            url : "/user/list",
+            mtype : "post",
+            datatype : "json",
+            height : 'auto',
+            colNames : [ '회사명/대표자', '계정 아이디', '패스워드', '사용자 이름', '메모', '회사 번호', '생성날짜'],
+            colModel : [ {
+                name : 'company',
+                index : 'company',
+                editable : false
+            }, {
+                name : 'uID',
+                index : 'uID',
+                editable : true,
+                key:true
+            }, {
+                name : 'uPwd',
+                index : 'uPwd',
+                editable : true,
+                sortable : false
+            }, {
+                name : 'uName',
+                index : 'uName',
+                editable : true
+            }, {
+                name : 'uMemo',
+                index : 'uMemo',
+                sortable : false,
+                editable : true
+            }, {
+                name : 'cID',
+                index : 'cID',
+                editable : true,
+                sortable : false,
+                hidden : true,
+                key : true
+            }, {
+                name : 'uRegidate',
+                index : 'uRegidate',
+                align : "right",
+                editable : false,
+                sortable : true
+            }],
+            rowNum : 10,
+            rowList : [10, 20, 30],
+            pager : '#pjqgrid',
+            sortname : 'uRegidate',
+            toolbarfilter : true,
+            viewrecords : true,
+            sortorder : 'desc',
+            emptyrecords : "데이터가 없습니다",
+            gridComplete : function() {
+                var ids = jQuery("#jqgrid").jqGrid('getDataIDs');
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    be = "<button class='btn btn-xs btn-default' data-original-title='Edit Row' onclick=\"jQuery('#jqgrid').editRow('" + cl + "');\"><i class='fa fa-pencil'></i></button>";
+                    se = "<button class='btn btn-xs btn-default' data-original-title='Save Row' onclick=\"jQuery('#jqgrid').saveRow('" + cl + "');\"><i class='fa fa-save'></i></button>";
+                    ca = "<button class='btn btn-xs btn-default' data-original-title='Cancel' onclick=\"jQuery('#jqgrid').restoreRow('" + cl + "');\"><i class='fa fa-times'></i></button>";
+                    //ce = "<button class='btn btn-xs btn-default' onclick=\"jQuery('#jqgrid').restoreRow('"+cl+"');\"><i class='fa fa-times'></i></button>";
+                    //jQuery("#jqgrid").jqGrid('setRowData',ids[i],{act:bFe+se+ce});
+                    jQuery("#jqgrid").jqGrid('setRowData', ids[i], {
+                        act : be + se + ca
+                    });
+                }
+            },
+            editurl : "/user/edit",
+            caption : "사용자 계정 정보",
+            multiselect : false,
+            autowidth : true,
+            shrinkToFit: !isMobile(),
+            autowidth : true,
+            forceFit: true
+        });
+        jQuery("#jqgrid").jqGrid('navGrid', "#pjqgrid",
+            {/*navGrid option*/
+                edit : false, add : false, del : true,
+            },
+            {height:280,reloadAfterSubmit:true}, // edit options
+            {height:280,reloadAfterSubmit:true}, // add options
+            {reloadAfterSubmit:false}, // del options
+            {
+                sopt:['cn', 'eq', 'ne', 'lt', 'le', 'gt', 'ge', 'ew', 'bw'],
+                onSearch:function() {
+                    //alert( $(".columns").find("option:selected").val() );	// 검색필드
+                    //alert( $(".selectopts").find("option:selected").html() );	// 검색조건 타입
+                    //alert( $("td.data").find(".input-elm").val() );	// 조건값
+                }
+            } // search options
+        );
+        jQuery("#jqgrid").jqGrid('inlineNav', "#pjqgrid",{
+            //addtext: "Add",
+            //edittext: "Edit",
+            //savetext: "Save",
+            //canceltext: "Cancel",
+            /*addParams: {
+                position: "afterSelected",
+                addRowParams: myEditOptions
+            },*/
+            addedrow: "first",
+            editParams: editOption,
+            addParams : {
+                addRowParams:addOption,
+            },
+            deleteParams : deleteOption
+        });
+
+
+        $("#jqgrid").jqGrid('navButtonAdd','#pjqgrid',{caption : "", title : "Excel 출력", buttonicon : 'fa-file-excel-o', onClickButton : function(e){
+                $("#jqgrid").jqGrid('excelExport', {url : "/user/exportExcel"});
+            }
+        });
+
+        /* Add tooltips */
+        $('.navtable .ui-pg-button').tooltip({
+            container : 'body'
+        });
+
+        // remove classes
+        $(".ui-jqgrid").removeClass("ui-widget ui-widget-content");
+        $(".ui-jqgrid-view").children().removeClass("ui-widget-header ui-state-default");
+        $(".ui-jqgrid-labels, .ui-search-toolbar").children().removeClass("ui-state-default ui-th-column ui-th-ltr");
+        $(".ui-jqgrid-pager").removeClass("ui-state-default");
+        $(".ui-jqgrid").removeClass("ui-widget-content");
+
+        // add classes
+        $(".ui-jqgrid-htable").addClass("table table-bordered table-hover");
+        $(".ui-jqgrid-btable").addClass("table table-bordered table-striped");
+
+        $(".ui-pg-div").removeClass().addClass("btn btn-sm btn-primary");
+        $(".ui-icon.ui-icon-plus").removeClass().addClass("fa fa-plus");
+        $(".ui-icon.ui-icon-pencil").removeClass().addClass("fa fa-pencil");
+        $(".ui-icon.ui-icon-trash").removeClass().addClass("fa fa-trash-o");
+        $(".ui-icon.ui-icon-search").removeClass().addClass("fa fa-search");
+        $(".ui-icon.ui-icon-refresh").removeClass().addClass("fa fa-refresh");
+        $(".ui-icon.fa-file-excel-o").removeClass().addClass("fa fa-file-excel-o");
+        $(".ui-icon.ui-icon-disk").removeClass().addClass("fa fa-save").parent(".btn-primary").removeClass("btn-primary").addClass("btn-success");
+        $(".ui-icon.ui-icon-cancel").removeClass().addClass("fa fa-times").parent(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
+
+        $(".ui-icon.ui-icon-seek-prev").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-prev").removeClass().addClass("fa fa-backward");
+
+        $(".ui-icon.ui-icon-seek-first").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-first").removeClass().addClass("fa fa-fast-backward");
+
+        $(".ui-icon.ui-icon-seek-next").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-next").removeClass().addClass("fa fa-forward");
+
+        $(".ui-icon.ui-icon-seek-end").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-end").removeClass().addClass("fa fa-fast-forward");
+
+        //smartadmin-skins.min 파일 KaSha이름으로 주석 달아논 부분으로 해결함
+        /*$("#jqgrid_cb").css("width","35px");
+        $("#jqgrid tbody tr td:first").css("width","35px");
+        $("#gview_jqgrid .ui-jqgrid-labels th, #gview_jqgrid .jqgrow td").css("padding", "6px 4px");
+        $(".jqgfirstrow td").css("padding", "0px");*/
+
+        $("#jqgrid_iladd div").click(function (event) {
+            selectCompanyBox(function(result){
+                if(result && $('#companySelect').val()!=null){
+                    $("#jqgrid_iladd").trigger("click");
+
+                    var text = $("#companySelect option:selected").text();
+                    var value = $("#companySelect option:selected").val();
+
+                    $("tr[aria-selected=true] td:nth-child(1)").text(text);
+                    $("tr[aria-selected=true] td:nth-child(6) input").val(value);
+
+                    $("tr[aria-selected=true] td:nth-child(6) input").prop('disabled', true);
+                }
+            });
+
+            return false;
+        });
+
+    })
+
+    $(window).on('resize.jqGrid', function() {
+        $('.ui-jqgrid .ui-jqgrid-htable th').addClass('importantRule');
+        $("#jqgrid").jqGrid('setGridWidth', $("#content").width());
+
+    })
+
+    var editOption = {
+        keys: true,
+        oneditfunc: function (rowid) {
+            $("#" + rowid + " td:nth-child(2) input").prop('disabled', true);
+        },
+        aftersavefunc: function (rowid, response, options) {
+            //alert("row with rowid=" + rowid + " is successfuly modified.");
+            var json = JSON.parse(response.responseText);
+            var data = json.data;
+
+            if(data.changedRows > 0){
+                successBox("사용자 정보가 수정되었습니다.");
+            }else if(data.affectedRows > 0){
+                infoBox("변경 된 정보가 없습니다.");
+            }else{
+                errorBoxCallback("사용자 정보를 수정하는데 문제가 있습니다.", function () {
+                    $("#refresh_jqgrid").trigger("click");
+                });
+            }
+        }
+    };
+
+    var addOption = {
+        keys: true,
+        oneditfunc: function (rowid) {
+            //alert("row with rowid=" + rowid + " is editing.");
+        },
+        aftersavefunc: function (rowid, response, options) {
+            //alert("row with rowid=" + rowid + " is successfuly modified.");
+
+            var json = JSON.parse(response.responseText);
+            var data = json.data;
+
+            if(json.responseStatus==200 && data.affectedRows > 0){
+                successBox("사용자 계정이 추가되었습니다.");
+            }else if(json.responseStatus==405){
+                errorBoxCallback("계정 아이디와 패스워드는 3글자 이상 입력해주세요.", function () {
+                    $("#refresh_jqgrid").trigger("click");
+                });
+            }else if(json.responseStatus==406){
+                errorBoxCallback("중복된 아이디 계정이 있는지 확인해 주세요.", function () {
+                    $("#refresh_jqgrid").trigger("click");
+                });
+            }else{
+                errorBoxCallback("사용자 계정을 추가하는데 문제가 있습니다.", function () {
+                    $("#refresh_jqgrid").trigger("click");
+                });
+            }
+        }
+    };
+
+    var deleteOption = {
+        keys: true,
+        aftersavefunc: function (rowid, response, options) {
+            //alert("row with rowid=" + rowid + " is successfuly modified.");
+            alert(JSON.stringify(response));
+        }
+    };
+
+</script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+
+<!--
+search 관련
+bw - begins with ( LIKE val% )
+eq - equal ( = )
+ne - not equal ( <> )
+lt - little ( < )
+le - little or equal ( <= )
+gt - greater ( > )
+ge - greater or equal ( >= )
+ew - ends with (LIKE %val )
+cn - contain (LIKE %val% )
+-->

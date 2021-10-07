@@ -1,0 +1,343 @@
+
+<%- include('header.html') -%>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+
+    <div class="row">
+        <div class="col-md-6">
+            <form class="smart-form">
+                <fieldset>
+                    <section>
+                        <label class="select">
+                            <select class="input-sm" id="companySelect" onchange="createJQGrid(this.value);">
+                                <option value='0' selected='' disabled=''>회사명/대표명 선택</option>
+                            </select> <i></i> </label>
+                    </section>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <!--
+    The ID "widget-grid" will start to initialize all widgets below
+    You do not need to use widgets if you dont want to. Simply remove
+    the <section></section> and you can use wells or panels instead
+    -->
+
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+
+        <!-- row -->
+        <div class="row" style="not(.smart-style-6)">
+
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <table id="jqgrid"></table>
+                <div id="pjqgrid"></div>
+            </article>
+
+        </div>
+
+        <!-- end row -->
+
+    </section>
+    <!-- end widget grid -->
+
+</div>
+<!-- end content -->
+
+<%- include('footer.html') -%>
+
+<!-- PAGE RELATED PLUGIN(S) -->
+
+<script src="javascripts/js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="javascripts/js/plugin/jqgrid/grid.locale-en.min.js"></script>
+
+<script src="/javascripts/js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="/javascripts/js/plugin/fuelux/wizard/wizard.min.js"></script>
+<script src="/javascripts/js/plugin/jquery-form/jquery-form.min.js"></script>
+<script src="/javascripts/js/plugin/maxlength/bootstrap-maxlength.min.js"></script>
+<script src="/javascripts/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/javascripts/js/plugin/clockpicker/clockpicker.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        pageSetUp();
+
+        getCompanyNameListAjax(function (data) {
+            var html = "";
+
+            $.each(data, function (index, item) {
+                html += "<option value='" + item.cID + "'>" + item.companyName + "</option>";
+            });
+
+            $("#companySelect").append(html);
+        });
+
+
+    })
+
+    function createJQGrid(cID){
+        $("#widget-grid").html("<div class='row' style='not(.smart-style-6)'>" +
+            "<article class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>" +
+            "<table id='jqgrid'></table>" +
+            "<div id='pjqgrid'></div>" +
+            "</article>" +
+            "</div>");
+        
+        jQuery("#jqgrid").jqGrid({
+            url : "/stock/list/" + cID,
+            mtype : "post",
+            datatype : "json",
+            height : 'auto',
+            colNames : [ '날짜', '납품처', 'PC', '모니터\n(23")', '모니터\n(27")', '모니터\n(32")', '지지대', '멀티탭', '콘센트\n(2구)', '콘센트\n(3구)',
+                '전기선', 'UTP', '몰딩', '공유기(4)', '공유기(8)', '허브(5)', '허브(8)', '허브(16)', '딸기', 'SD카드', '충전기', 'HDMI',
+                'DVI', '모니터\n어댑터', 'usb\n리피터\n어댑터', '리피터', '분배기', '기타', '재고번호', '회사번호', '등록일'],
+            colModel : [
+                {   name : 'date',  index : 'date',     editable : true,    sortable : true },
+                {   name : 'delivery',  index : 'delivery',     editable : true,    sortable : true },
+                {   name : 'pc',    index : 'pc',   editable : true,    sortable : true },
+                {   name : 'monitor23',    index : 'pc',   editable : true,    sortable : true },
+                {   name : 'monitor27',    index : 'pc',   editable : true,    sortable : true },
+                {   name : 'monitor32',    index : 'pc',   editable : true,    sortable : true },
+                {   name : 'supportFixture',    index : 'pc',   editable : true,    sortable : true },
+                {   name : 'multitab',    index : 'pc',   editable : true,    sortable : true },
+                {   name : 'concent2',    index : 'concent2',   editable : true,    sortable : true },
+                {   name : 'concent3',    index : 'concent3',   editable : true,    sortable : true },
+                {   name : 'electricWire',    index : 'electricWire',   editable : true,    sortable : true },
+                {   name : 'utp',    index : 'utp',   editable : true,    sortable : true },
+                {   name : 'molding',    index : 'molding',   editable : true,    sortable : true },
+                {   name : 'router4',    index : 'router4',   editable : true,    sortable : true },
+                {   name : 'router8',    index : 'router8',   editable : true,    sortable : true },
+                {   name : 'hub5',      index : 'hub5',   editable : true,    sortable : true },
+                {   name : 'hub8',      index : 'hub8',   editable : true,    sortable : true },
+                {   name : 'hub16',     index : 'hub16',   editable : true,    sortable : true },
+                {   name : 'strawberry',    index : 'strawberry',   editable : true,    sortable : true },
+                {   name : 'sdCard',    index : 'sdCard',   editable : true,    sortable : true },
+                {   name : 'charger',    index : 'charger',   editable : true,    sortable : true },
+                {   name : 'hdmi',    index : 'hdmi',   editable : true,    sortable : true },
+                {   name : 'dvi',    index : 'dvi',   editable : true,    sortable : true },
+                {   name : 'monitorAdapter',    index : 'monitorAdapter',   editable : true,    sortable : true },
+                {   name : 'repeaterAdapter',    index : 'repeaterAdapter',   editable : true,    sortable : true },
+                {   name : 'repeater',    index : 'repeater',   editable : true,    sortable : true },
+                {   name : 'distributor',    index : 'distributor',   editable : true,    sortable : true },
+                {   name : 'etc',    index : 'etc',   editable : true,    sortable : true },
+                {   name : 'sID',    index : 'sID',   editable : true,    sortable : false,   hidden : true,  key : true    },
+                {   name : 'cID',    index : 'cID',   editable : true,    sortable : false,   hidden : true,  key : true    },
+                {   name : 'sRegidate',     index : 'sRegidate',    align : "right",    editable : false,   sortable : false,   hidden : true   }
+            ],
+            rowNum : 10,
+            rowList : [10, 20, 30],
+            pager : '#pjqgrid',
+            sortname : 'sRegidate',
+            toolbarfilter : true,
+            viewrecords : true,
+            sortorder : 'asc',
+            emptyrecords : "데이터가 없습니다",
+            gridComplete : function() {
+                var ids = jQuery("#jqgrid").jqGrid('getDataIDs');
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    be = "<button class='btn btn-xs btn-default' data-original-title='Edit Row' onclick=\"jQuery('#jqgrid').editRow('" + cl + "');\"><i class='fa fa-pencil'></i></button>";
+                    se = "<button class='btn btn-xs btn-default' data-original-title='Save Row' onclick=\"jQuery('#jqgrid').saveRow('" + cl + "');\"><i class='fa fa-save'></i></button>";
+                    ca = "<button class='btn btn-xs btn-default' data-original-title='Cancel' onclick=\"jQuery('#jqgrid').restoreRow('" + cl + "');\"><i class='fa fa-times'></i></button>";
+                    //ce = "<button class='btn btn-xs btn-default' onclick=\"jQuery('#jqgrid').restoreRow('"+cl+"');\"><i class='fa fa-times'></i></button>";
+                    //jQuery("#jqgrid").jqGrid('setRowData',ids[i],{act:bFe+se+ce});
+                    jQuery("#jqgrid").jqGrid('setRowData', ids[i], {
+                        act : be + se + ca
+                    });
+                }
+            },
+            editurl : "/stock/edit/" + cID,
+            caption : "재고 관리",
+            multiselect : false,
+            autowidth : true,
+            shrinkToFit: !isMobile(),
+            autowidth : true,
+            forceFit: true
+        });
+        jQuery("#jqgrid").jqGrid('navGrid', "#pjqgrid",
+            {/*navGrid option*/
+                edit : false, add : false, del : true,
+            },
+            {height:280,reloadAfterSubmit:true}, // edit options
+            {height:280,reloadAfterSubmit:true}, // add options
+            {reloadAfterSubmit:false}, // del options
+            {
+                sopt:['cn', 'eq', 'ne', 'lt', 'le', 'gt', 'ge', 'ew', 'bw'],
+                onSearch:function() {
+                    //alert( $(".columns").find("option:selected").val() );	// 검색필드
+                    //alert( $(".selectopts").find("option:selected").html() );	// 검색조건 타입
+                    //alert( $("td.data").find(".input-elm").val() );	// 조건값
+                }
+            } // search options
+        );
+        jQuery("#jqgrid").jqGrid('inlineNav', "#pjqgrid",{
+            //addtext: "Add",
+            //edittext: "Edit",
+            //savetext: "Save",
+            //canceltext: "Cancel",
+            /*addParams: {
+             position: "afterSelected",
+             addRowParams: myEditOptions
+             },*/
+            addedrow: "first",
+            editParams: editOption,
+            addParams : {
+                addRowParams:addOption,
+            },
+            deleteParams : deleteOption
+        });
+
+        $("#jqgrid").jqGrid('navButtonAdd','#pjqgrid',{caption : "", title : "Excel 출력", buttonicon : 'fa-file-excel-o', onClickButton : function(e){
+            $("#jqgrid").jqGrid('excelExport', {url : "/stock/exportExcel"});
+        }
+        });
+
+        /* Add tooltips */
+        $('.navtable .ui-pg-button').tooltip({
+            container : 'body'
+        });
+
+        // remove classes
+        $(".ui-jqgrid").removeClass("ui-widget ui-widget-content");
+        $(".ui-jqgrid-view").children().removeClass("ui-widget-header ui-state-default");
+        $(".ui-jqgrid-labels, .ui-search-toolbar").children().removeClass("ui-state-default ui-th-column ui-th-ltr");
+        $(".ui-jqgrid-pager").removeClass("ui-state-default");
+        $(".ui-jqgrid").removeClass("ui-widget-content");
+
+        // add classes
+        $(".ui-jqgrid-htable").addClass("table table-bordered table-hover");
+        $(".ui-jqgrid-btable").addClass("table table-bordered table-striped");
+
+        $(".ui-pg-div").removeClass().addClass("btn btn-sm btn-primary");
+        $(".ui-icon.ui-icon-plus").removeClass().addClass("fa fa-plus");
+        $(".ui-icon.ui-icon-pencil").removeClass().addClass("fa fa-pencil");
+        $(".ui-icon.ui-icon-trash").removeClass().addClass("fa fa-trash-o");
+        $(".ui-icon.ui-icon-search").removeClass().addClass("fa fa-search");
+        $(".ui-icon.ui-icon-refresh").removeClass().addClass("fa fa-refresh");
+        $(".ui-icon.fa-file-excel-o").removeClass().addClass("fa fa-file-excel-o");
+        $(".ui-icon.ui-icon-disk").removeClass().addClass("fa fa-save").parent(".btn-primary").removeClass("btn-primary").addClass("btn-success");
+        $(".ui-icon.ui-icon-cancel").removeClass().addClass("fa fa-times").parent(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
+
+        $(".ui-icon.ui-icon-seek-prev").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-prev").removeClass().addClass("fa fa-backward");
+
+        $(".ui-icon.ui-icon-seek-first").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-first").removeClass().addClass("fa fa-fast-backward");
+
+        $(".ui-icon.ui-icon-seek-next").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-next").removeClass().addClass("fa fa-forward");
+
+        $(".ui-icon.ui-icon-seek-end").wrap("<div class='btn btn-sm btn-default'></div>");
+        $(".ui-icon.ui-icon-seek-end").removeClass().addClass("fa fa-fast-forward");
+
+    }
+
+    $(window).on('resize.jqGrid', function() {
+        $('.ui-jqgrid .ui-jqgrid-htable th').addClass('importantRule');
+        $("#jqgrid").jqGrid('setGridWidth', $("#content").width());
+
+    })
+
+    var editOption = {
+        keys: true,
+        oneditfunc: function (rowid) {
+            $("#" + rowid + " td:nth-child(1) input").addClass('form-control');
+            $("#" + rowid + " td:nth-child(1) input").datepicker({
+                dateFormat : 'yy-mm-dd',
+                prevText : '<i class="fa fa-chevron-left"></i>',
+                nextText : '<i class="fa fa-chevron-right"></i>',
+                onSelect: function(dateText){
+
+                }
+            });
+        },
+        aftersavefunc: function (rowid, response, options) {
+            //alert("row with rowid=" + rowid + " is successfuly modified.");
+            var json = JSON.parse(response.responseText);
+            var data = json.data;
+
+            if(data.changedRows > 0){
+                successBox("재고 정보가 수정되었습니다.");
+            }else if(data.affectedRows > 0){
+                infoBox("변경 된 정보가 없습니다.");
+            }else{
+                errorBoxCallback("사용자 정보를 수정하는데 문제가 있습니다.", function () {
+                    $("#refresh_jqgrid").trigger("click");
+                });
+            }
+        }
+    };
+
+    var addOption = {
+        keys: true,
+        oneditfunc: function (rowid) {
+            $("#" + rowid + " td:nth-child(1) input").addClass('form-control');
+            $("#" + rowid + " td:nth-child(1) input").datepicker({
+                dateFormat : 'yy-mm-dd',
+                prevText : '<i class="fa fa-chevron-left"></i>',
+                nextText : '<i class="fa fa-chevron-right"></i>',
+                onSelect: function(dateText){
+
+                }
+            });
+        },
+        aftersavefunc: function (rowid, response, options) {
+            //alert("row with rowid=" + rowid + " is successfuly modified.");
+
+            var json = JSON.parse(response.responseText);
+            var data = json.data;
+
+            if(json.responseStatus==200 && data.affectedRows > 0 && data.insertId != null){
+                $("#" + rowid).find("td[aria-describedby='jqgrid_sID']").text(data.insertId);
+                successBox("일지가 추가되었습니다.");
+            }else{
+                errorBoxCallback("일지를 추가하는데 문제가 있습니다.", function () {
+                    $("#refresh_jqgrid").trigger("click");
+                });
+            }
+        }
+    };
+
+    var deleteOption = {
+        keys: true,
+        aftersavefunc: function (rowid, response, options) {
+            //alert("row with rowid=" + rowid + " is successfuly modified.");
+            alert(JSON.stringify(response));
+        }
+    };
+
+</script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+
+<!--
+search 관련
+bw - begins with ( LIKE val% )
+eq - equal ( = )
+ne - not equal ( <> )
+lt - little ( < )
+le - little or equal ( <= )
+gt - greater ( > )
+ge - greater or equal ( >= )
+ew - ends with (LIKE %val )
+cn - contain (LIKE %val% )
+-->
