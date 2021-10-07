@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <link rel="stylesheet" type="text/css" href="init.css">
+</head>
+<style>
+    body,html   {width:100%;  height:100%; background-color: black;}
+    .bg{
+        position:fixed;
+        width:100%;
+        height:100%;
+    }
+    .bg img{
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        margin:auto;
+        min-width:50%;
+        min-height:50%;
+        display: inline-block;
+
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+</style>
+<script>
+    function init(){
+        var bg = document.getElementById("bg");
+        var img = document.getElementById("img");
+        img.width = bg.offsetHeight;
+    }
+    function setImage(path) {
+        var realPath;
+
+        if(path == undefined || path == null || path.length==0 || path.substr(path.length-1, path.length)=="/"){
+            realPath = "/home/pi/docker/storage/room/room_img/user.jpg";
+        }else{
+            realPath = path;
+        }
+        document.getElementById("img").src = realPath;
+    }
+</script>
+</head>
+<body onload="init()">
+<div class='bg' id="bg">
+    <img id="img" src=""/>
+</div>
+</body>
+</html>

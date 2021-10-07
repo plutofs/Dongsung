@@ -1,0 +1,1002 @@
+<%
+var rID = typeof rID=="undefined" ? null : rID;
+var type = typeof type=="undefined" ? null : type;
+var data = typeof data=="undefined" ? null : data[0]=="undefined" ? null : data[0];
+
+var firstTemplate;
+var roomName;
+
+if(type!=null && type=="edit"){
+    if (typeof data != "undefined" && data!=null) {
+        firstTemplate = data.gTemplate;
+        roomName = data.rName;
+    }
+}else{
+    firstTemplate = "room1.html";
+    roomName = rName;
+}
+
+%>
+
+<% include header.html %>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+
+    <!-- widget grid -->
+    <section id="" class="">
+
+        <!-- row -->
+        <div class="row">
+
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <div class="alert alert-info fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-info"></i>
+                    <strong>Info!</strong> <br>
+                    특정 필드는 템플릿 종류에 따라 적용이 되지 않을수도 있습니다.<br>
+                    미리보기 화면은 실제 화면과 조금 다를수도 있습니다.
+                </div>
+
+                <iframe id="previewDiv" class="col-sm-12" style="padding:0px; border:0px">
+                    <!--<img src="/stylesheets/img/superbox/superbox-full-1.jpg"/>-->
+                </iframe>
+            </article>
+
+            <!-- NEW WIDGET START -->
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-fullscreenbutton="false">
+                    <!-- widget options:
+                    usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                    data-widget-colorbutton="false"
+                    data-widget-editbutton="false"
+                    data-widget-togglebutton="false"
+                    data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false"
+                    data-widget-custombutton="false"
+                    data-widget-collapsed="true"
+                    data-widget-sortable="false"
+                    -->
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-check"></i> </span>
+                        <h2>빈소 안내  </h2>
+
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <div class="row">
+                                <form id="wizard" novalidate="novalidate" name="wizard" action="/room/roomEdit" enctype="multipart/form-data">
+                                    <input type="hidden" id="rID" name="rID" value="<%=rID%>"/>
+                                    <input type="hidden" id="gID" name="gID"/>
+                                    <div id="bootstrap-wizard" class="col-sm-12">
+                                        <div class="form-bootstrapWizard hide-step">
+                                            <ul class="bootstrapWizard form-wizard" id="stepWizard">
+                                                <li class="active" data-target="#step1">
+                                                    <a href="#tab1" data-toggle="tab" onclick="$('#nextButton').removeClass('hide');$('#finishButton').addClass('hide');"> <span class="step">1</span> <span class="title">기본 정보</span> </a>
+                                                </li>
+                                                <li data-target="#step2">
+                                                    <a href="#tab2" data-toggle="tab" onclick="$('#nextButton').removeClass('hide');$('#finishButton').addClass('hide');"> <span class="step">2</span> <span class="title">화면 정보</span> </a>
+                                                </li>
+                                                <!--<li data-target="#step3">-->
+                                                    <!--<a href="#tab3" data-toggle="tab" onclick="$('#nextButton').addClass('hide');$('#finishButton').removeClass('hide');"> <span class="step">3</span> <span class="title">완료</span> </a>-->
+                                                <!--</li>-->
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="tab-content" id="tab-content">
+                                            <div class="tab-pane active" id="tab1">
+                                                <h3 class="wizard-title"><strong>Step 1 </strong> - 기본 정보</h3>
+
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group">
+                                                            <label>고인명</label>
+                                                            <input class="form-control" placeholder="고인명" type="text" name="gName" id="gName">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-2">
+                                                        <div class="input-group">
+                                                            <label>종교</label>
+                                                            <input class="form-control input-md" placeholder="종교" type="text" name="gReligionPosition" id="gReligionPosition">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-2">
+                                                        <div class="input-group">
+                                                            <label>직위</label>
+                                                            <input class="form-control input-md" placeholder="직위" type="text" name="jik" id="jik">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-2">
+                                                        <div class="input-group">
+                                                            <label>나이</label>
+                                                            <input class="form-control" placeholder="나이" type="text" name="gAge" id="gAge">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-sm-2">
+                                                        <div class="input-group full_width">
+                                                            <label>성별</label>
+                                                            <br>
+                                                            <select name="gSex" id="gSex" class="form-control">
+                                                                <option value="0" selected">없음</option>
+                                                                <option value="1">남성</option>
+                                                                <option value="2">여성</option>
+                                                                <option value="3">男性</option>
+                                                                <option value="4">女性</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <label>입관일시</label>
+                                                            <input type="text" class="form-control" name="ipgwanDate" id="ipgwanDate" placeholder="입관일시" value="0000-00-00">
+                                                            
+
+                                                            <!--<span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <label>입관시간</label>
+                                                            <input class="form-control" id="ipgwanTime" name="ipgwanTime" type="text" placeholder="입관시간" data-autoclose="true" value="00:00">
+                                                            <!--<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <label>발인일시</label>
+                                                            <input type="text" class="form-control" name="barinDate" id="barinDate" placeholder="발인일시" value="0000-00-00">
+                                                            <!--<span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <label>발인시간</label>
+                                                            <input class="form-control" id="barinTime" name="barinTime" type="text" placeholder="발인시간" data-autoclose="true" value="00:00">
+                                                            <!--<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group binso-anne">
+                                                    <label class="leftLabel col-md-2">장지</label>
+                                                    <div class="input-group col-md-10">
+                                                        <textarea class="form-control" name="jangji" id="jangji" rows="2" placeholder="장지"></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="mourner-row">
+                                                        <div class="imjong-ilsi col-sm-4">
+                                                            <div class="input-group">
+                                                                <label>임종일시</label>
+                                                                <input type="text" class="form-control" name="ddate" id="ddate" placeholder="임종일시" value="0000-00-00">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="input-group">
+                                                                <label>임종시간</label>
+                                                                <input class="form-control" id="dTime" name="dTime" type="text" placeholder="임종시간" data-autoclose="true" value="00:00">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 sj-modal-btn">
+                                                            <div class="input-group">
+                                                                <a href="javascript:void(0);" class="btn btn-primary btn-sm" id="sj-modal-btn">상주등록</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <label class="leftLabel col-md-2">상주<br>(빈소안내)</label>
+                                                    <div class="input-group col-md-10">
+                                                        <textarea class="form-control" name="gSangJu" id="gSangJu" rows="6" placeholder="상주 (빈소안내)"></textarea>
+                                                    </div>
+                                                    <label class="leftLabel col-md-2">상주<br>(종합안내)</label>
+                                                    <div class="input-group col-md-10">
+                                                        <textarea class="form-control" name="gSangJuTotal" id="gSangJuTotal" rows="6" placeholder="상주 (종합안내)"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="panel-group smart-accordion-default" id="accordion">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse" class="collapsed" aria-expanded="false"> <i class="fa fa-lg fa-angle-down pull-right"></i> <i class="fa fa-lg fa-angle-up pull-right"></i> 기타정보 </a></h4>
+                                                            </div>
+                                                            <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                                                <div class="panel-body">
+                                                                    <div class="smart-form">
+                                                                        <div class="inline-group">
+                                                                            <label class="checkbox">
+                                                                                <input type="checkbox" name="diagnosis" id="diagnosis">
+                                                                                <i></i>진단</label>
+                                                                            <label class="checkbox">
+                                                                                <input type="checkbox" name="first" id="first">
+                                                                                <i></i>초도</label>
+                                                                            <label class="checkbox">
+                                                                                <input type="checkbox" name="calculate" id="calculate">
+                                                                                <i></i>정산</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <br/>
+
+                                                                    <div class="form-group">
+                                                                        <label class="leftLabel col-md-2">상조회</label>
+                                                                        <div class="input-group col-md-10">
+                                                                            <input class="form-control input-md" placeholder="상조회" type="text" name="funeralService" id="funeralService">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label class="leftLabel col-md-2">배차</label>
+                                                                        <div class="input-group col-md-10">
+                                                                            <input class="form-control input-md" placeholder="배차" type="text" name="baecha" id="baecha">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label class="leftLabel col-md-2">비고</label>
+                                                                        <div class="input-group col-md-10">
+                                                                            <textarea class="form-control" name="gMemo" id="gMemo" rows="2" placeholder="비고"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-pane" id="tab2">
+                                                <h3 class="wizard-title"><strong>Step 2</strong> - 화면 및 이미지 정보</h3>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">고인 이미지 등록</label>
+                                                    <section class="col-sm-8" style="padding-bottom: 3px">
+                                                            <input type="file" class="btn btn-default col-sm-8" name="gImage" id="gImage"
+                                                                   accept="image/gif, image/jpeg, image/png, image/jpg, image/bmp"
+                                                                   onchange="imageChange(this)">
+                                                        <a class="btn btn-default btn-sm ml-2" onclick="removeImage()" style="margin-left:10px">이미지 삭제</a>
+                                                        <input type="hidden" name="gImageRemove" id="gImageRemove" value="0"/>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">배경 음악 등록</label>
+                                                    <section class="col-sm-8" style="padding-bottom: 3px">
+                                                        <input type="file" class="btn btn-default col-sm-8" name="gMusic" id="gMusic"
+                                                               accept=".mp3" onchange="musicChange(this)"> <!-- audio/mpeg3 -->
+                                                        <a class="btn btn-default btn-sm ml-2" onclick="removeMusic()" style="margin-left:10px">음악 삭제</a>
+                                                        <input type="hidden" name="gMusicRemove" id="gMusicRemove" value="0"/>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">템플릿 선택</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="gTemplate" id="gTemplate">
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">폰트 선택</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="gAllFont" id="gAllFont">
+                                                                <option value="Nanum" selected>나눔고딕체</option>
+                                                                <option value="UnBatang">바탕체</option>
+                                                                <option value="UnDinaru">디나루체</option>
+                                                                <option value="UnGungseo">궁서체</option>
+                                                                <option value="UnDotum">돋움체</option>
+                                                                <option value="UnGraphic">그래픽체</option>
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-sm-3">화살표 선택(종합)</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="gArrow" id="gArrow">
+                                                                <option value="0" selected>없음</option>
+                                                                <option value="1">위쪽</option>
+                                                                <option value="2">오른쪽</option>
+                                                                <option value="3">아래쪽</option>
+                                                                <option value="4">왼쪽</option>
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <div class="row" style="display: none;">
+                                                    <label class="col-sm-3">로고 활성화</label>
+                                                    <section class="col-sm-4">
+                                                        <label class="select full_width">
+                                                            <select class="full_width" name="gEnableLogo" id="gEnableLogo">
+                                                                <option value="0" selected>비활성화</option>
+                                                                <option value="1">활성화</option>
+                                                            </select> <i></i> </label>
+                                                    </section>
+                                                </div>
+
+                                                <br>
+                                                <div class="row">
+                                                    <label class="col-sm-12">배경이미지 선택</label>
+                                                </div>
+                                                <div class="row">
+                                                    <div id="tabs" style="margin: 0px 10px 10px 10px; ">
+                                                        <ul>
+                                                            <li>
+                                                                <a href="#tabs-a">기독교</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#tabs-b">천주교</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#tabs-c">불교</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#tabs-d">기타</a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="tabs-a">   </div>
+                                                        <div id="tabs-b">   </div>
+                                                        <div id="tabs-c">   </div>
+                                                        <div id="tabs-d">   </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--<div class="tab-pane" id="tab3">-->
+                                                <!--<h3 class="wizard-title"><strong>Step 3</strong> - 완료</h3>-->
+                                                <!--<br>-->
+                                                <!--<h1 class="text-center text-success"><strong><i class="fa fa-check fa-lg"></i> Complete</strong></h1>-->
+                                                <!--<h4 class="text-center">완료 버튼을 눌러주세요.</h4>-->
+                                                <!--<br>-->
+                                                <!--<br>-->
+                                            <!--</div>-->
+
+                                            <div class="form-actions">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <ul class="pager wizard no-margin">
+                                                            <!--<li class="previous first disabled">
+                                                            <a href="javascript:void(0);" class="btn btn-lg btn-default"> First </a>
+                                                            </li>-->
+                                                            <li class="previous disabled" id="previousButton">
+                                                                <a href="javascript:void(0);" class="btn btn-lg btn-default"> 이전 </a>
+                                                            </li>
+                                                            <!--<li class="next last">
+                                                            <a href="javascript:void(0);" class="btn btn-lg btn-primary"> Last </a>
+                                                            </li>-->
+                                                            <li class="next" id="nextButton">
+                                                                <a href="javascript:void(0);" class="btn btn-lg txt-color-darken"> 다음 </a>
+                                                            </li>
+                                                            <li class="next hide" id="finishButton">
+                                                                <a href="javascript:void(0);" class="btn btn-lg txt-color-darken"> 완료 </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="modal mourner-modal" id="mournerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <!-- <button type="button" class="close modal_close" aria-hidden="true">
+                                                            ×
+                                                        </button> -->
+                                                        <h4 class="modal-title" id="myModalLabel">고인과의 관계 </h4>
+                                                    </div>
+                                                    <div class="modal-body" style="overflow:scroll; height:500px;">
+                                                        <table class="table" id="mourner-list">
+                                                            <thead>
+                                                            <tr>
+                                                                <th class="text-center">관계</th>
+                                                                <th class="text-center">상주명</th>
+                                                                <th class="text-center">연락처</th>
+                                                                <th class="text-center">은행</th>
+                                                                <th class="text-center">계좌번호</th>
+                                                                <th class="text-center">예금주명</th>
+                                                                <th class="text-center">삭제<br>추가</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="mourner-list-body">
+                                                            </tbody>
+                                                            <tfoot id="mourner-insert">
+                                                            <tr>
+                                                                <td class="mourner-type">
+                                                                    <input type="hidden" name="sIDX" value="">
+                                                                    <input type="hidden" name="regDate" value="">
+                                                                    <select name="relation" id="relation" class="form-control">
+                                        
+                                                                    </select>
+                                                                </td>
+                                                                <td class="mourner-input">
+                                                                    <!-- input-group -->
+                                                                    <div class="">
+                                                                        <input type="text" class="form-control input-md" placeholder="상주명을 입력해주세요" name="sname" id="sname">
+                                                                    </div>
+                                                                </td>
+                                                                <td class="mourner-input">
+                                                                    <input type="tel" class="form-control input-md" placeholder="010-0000-0000" name="stel" id="stel">
+                                                                </td>
+                                                                <td class="mourner-type">
+                                                                    <select name="bank" id="bank" class="form-control">
+                                                                    </select>
+                                                                </td>
+                                                                <td class="mourner-input mourner-bank-account">
+                                                                    <input type="tel" class="form-control input-md" placeholder="계좌번호를 입력해주세요" name="banknum" id="banknum">
+                                                                </td>
+                                                                <td class="mourner-input">
+                                                                    <input type="tel" class="form-control input-md" placeholder="예금주명을 입력해주세요" name="bankowner" id="bankowner">    
+                                                                </td>
+                                                                <td class="mourner-btn text-center" style="width:70px; text-align:center;">
+                                                                    <span class="btn btn-primary mourner-plus-btn" onclick="addMourner()">+</span>
+                                                                </td>
+                                                            </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default modal_close" data-dismiss="modal">
+                                                            취소
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary" onclick="saveModals()">
+                                                            저장
+                                                        </button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- end widget content -->
+
+                    </div>
+                    <!-- end widget div -->
+
+                </div>
+                <!-- end widget -->
+
+            </article>
+            <!-- WIDGET END -->
+
+        </div>
+        <!-- end row -->
+
+    </section>
+    <!-- end widget grid -->
+
+</div>
+<!-- end content -->
+<!-- Modal -->
+
+<% include footer.html %>
+
+<style>
+    body.smart-style-6 #content {margin-top:0px;}
+    .jarviswidget>div { padding: 6px 13px 0;}
+    .full_width {width:100%}
+    .tab-pane {min-height: 550px}
+    .leftLabel {float:left; padding:6px 0px 0px 0px; }
+    .jarviswidget .widget-body {min-height: initial;}
+    .wizard-title {margin: 0 0 10px 0; }
+    .hide-step {position: absolute; top: -9999px; left: -9999px;}
+</style>
+<!-- PAGE RELATED PLUGIN(S) -->
+<script src="/javascripts/js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="/javascripts/js/plugin/fuelux/wizard/wizard.min.js"></script>
+<script src="/javascripts/js/plugin/jquery-form/jquery-form.min.js"></script>
+<script src="/javascripts/js/plugin/maxlength/bootstrap-maxlength.min.js"></script>
+<script src="/javascripts/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/javascripts/js/plugin/clockpicker/clockpicker.min.js"></script>
+<script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+<script src="/javascripts/js/plugin/image-compressor/image-compressor.js"></script>
+<script src="/javascripts/js/api/roomEdit.js"></script>
+<script src="/javascripts/js/plugin/jquery-template/jquery.tmpl.min.js"></script>
+
+<script type="text/javascript">
+     var banklist =['국민은행','기업은행','NH농협은행','신한은행','우체국','SC은행','하나은행','한국씨티은행','우리은행','경남은행','광주은행','대구은행','부산은행','한국산업은행','수협중앙회','전북은행','제주은행','새마을금고','상호저축은행','신협중앙회','케이뱅크은행','카카오뱅크'];
+     var mournerSelectList =['배우자','아들','딸','며느리','손주'];
+
+     window.onload = function() {
+        //모달 띄우고 닫는 스크립트
+        function onClick() {
+                document.querySelector('.mourner-modal').style.display ='block';
+            }  
+
+            function offClick() {
+                document.querySelector('.mourner-modal').style.display ='none';
+            }
+        
+            document.getElementById('sj-modal-btn').addEventListener('click', onClick);
+            document.querySelector('.modal_close').addEventListener('click', offClick);
+    };
+
+    //행 추가!!.. 제거는 못했습니당.... modal 영역에 가셔서 보시면 되세요!
+    // 추가 버튼.mourner-plus-btn  삭제버튼 .mourner-delete-btn
+    // function addMourner() {
+
+    //     const table = document.getElementById('mourner-insert');
+        
+    //     const newRow = table.insertRow(0);
+
+    //     const newCell1 = newRow.insertCell(0);
+    //     const newCell2 = newRow.insertCell(1);
+    //     const newCell3 = newRow.insertCell(2);
+    //     const newCell4 = newRow.insertCell(3);
+    //     const newCell5 = newRow.insertCell(4);
+    //     const newCell6 = newRow.insertCell(5);
+
+    //     newCell1.innerText = 'ㅇㅇ';
+    //     newCell2.innerText = 'ㅂㅂ';
+    //     newCell3.innerText = 'ㅁㅁ';
+    //     newCell4.innerText = 'ㄴㄴ';
+    //     newCell5.innerText = 'ㅇㅇ';
+    //     newCell6.innerText = 'ㅈㅈ';
+    // }
+
+
+
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    $("#previewDiv").hide();
+    var first = true;
+
+    $(document).ready(function() {
+        //반응형 사이즈 변경
+        resizePreview($("#previewDiv"));
+
+        pageSetUp();
+
+        createSelect();
+
+        var tabContent = $("#tab-content");
+        var previewDiv = $('#previewDiv');
+        previewDiv.attr("src","/storage/room/<%=firstTemplate%>");
+        previewDiv.css("height", previewDiv.width() * 9 / 16);
+
+        /*$("#stepWizard").click(function (e) {   //step 아이콘 클릭 막기.
+         e.stopPropagation();
+         })*/
+
+        $('#tabs').tabs();
+
+        getReligionImage(function () {
+            <%if(type!=null && type=="edit"){%>
+                tabContent.find("input:radio[name='gReligion']:radio[value='<%=data.gReligion%>']").prop("checked", true);
+            <%}%>
+        });     //종교 이미지 리스트 가져오기.
+        getGTemplates(function(){
+            <%if(type!=null && type=="edit"){%>
+                document.getElementById("gTemplate").value = "<%=data.gTemplate%>";
+            <%}else{%>
+                document.getElementById("gTemplate").options[0].selected=true;
+            <%}%>
+        });         //템플릿 리스트 가져오기.
+
+        getCompanyWithCallback('', '<%=rID%>', function (data) { //로고 정보 세팅
+            switch (data.responseStatus){
+                case 200:   $("#gEnableLogo").attr("logoPath", "/upload/logo/" + data.data[0].cImage);
+                <%if(type!=null && type=="edit" && data.gEnableLogo==1){%>
+                    var frame = document.getElementById("previewDiv");
+                    var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+
+                    previewDiv.load(function () {
+                        doc.setLogo("/upload/logo/" + data.data[0].cImage);
+                    });
+                <%}%>
+                break;
+                case 204:   $("#gEnableLogo").attr("logoPath", "");     break;
+                default:    smallNotification("Error", "로고 정보를 가져올수 없습니다.",0);  break;
+            }
+        });
+
+        
+        function setDateFormat(value){//YYYY-MM-DD H:i:s로 변환시키기. 현재 없어서 제작
+            var date = new Date(value);
+            var month = date.getMonth()+1, dates = date.getDate(), hour = date.getHours(), year = date.getFullYear(), minute = date.getMinutes(), seconds = date.getSeconds();
+            var ddate = year + "-" + (month<10 ? "0" + month : month) + "-" + (dates<10 ? "0" + dates : dates) + " " + (hour<10 ? "0" + hour : hour)+":"+(minute<10 ? "0" + minute : minute)+":"+(seconds<10 ? "0" + seconds : seconds);
+
+            return ddate;
+        }
+        <%if(type!=null && type=="edit"){%>
+            getSangjuyWithCallback('<%=rID%>', function (data) { //로고 정보 세팅
+                switch (data.responseStatus){
+                    case 200:  
+                        for(var dataList of data.data){
+                            var param = {
+                                "sIDX" : dataList.sIDX,
+                                "regDate" : setDateFormat(dataList.regDate),
+                                "relation" : dataList.relation,
+                                "sname" :  dataList.sname,
+                                "stel" : dataList.stel,
+                                "bank" : dataList.bank,
+                                "banknum" : dataList.banknum,
+                                "bankowner" : dataList.bankowner,
+                                "banklist" : banklist,
+                                "mournerSelectList" : mournerSelectList
+                            }
+                            Mournerinsert(param);
+                        }
+                    break;
+                }
+            });
+
+            tabContent.find("#gName").val('<%=data.gName%>');
+            tabContent.find("#gAge").val('<%=data.gAge%>');
+            tabContent.find("#gSex option[value='<%=data.gSex%>']").prop('selected', true);
+            //tabContent.find("input:radio[name='gReligion']:radio[value='<%=data.gReligion%>']").prop("checked", true);
+            tabContent.find("#gReligionPosition").val('<%=data.gReligionPosition%>');
+            tabContent.find("#jik").val('<%=data.jik%>');
+
+            var ipgwan = new Date('<%=data.ipgwan%>'), barin = new Date('<%=data.barin%>'), ddate = new Date('<%=data.dDate%>');
+            if(isNaN(ipgwan)){
+                tabContent.find("#ipgwanDate").val(new Date().toISOString().slice(0,10));
+                tabContent.find("#ipgwanTime").val("00:00");
+            }else{
+                tabContent.find("#ipgwanDate").datepicker("setDate", ipgwan);
+                tabContent.find("#ipgwanTime").val(("0" + ipgwan.getHours()).slice(-2) + ":" + ("0" + ipgwan.getMinutes()).slice(-2));
+            }
+            if(isNaN(barin)){
+                tabContent.find("#barinDate").val(new Date().toISOString().slice(0,10));
+                tabContent.find("#barinTime").val("00:00");
+            }else{
+                tabContent.find("#barinDate").datepicker("setDate", barin);
+                tabContent.find("#barinTime").val(("0" + barin.getHours()).slice(-2) + ":" + ("0" + barin.getMinutes()).slice(-2));
+            }
+            if(isNaN(ddate)){
+                tabContent.find("#ddate").val(new Date().toISOString().slice(0,10));
+                tabContent.find("#dTime").val("00:00");
+            }else{
+                tabContent.find("#ddate").datepicker("setDate", ddate);
+                tabContent.find("#dTime").val(("0" + ddate.getHours()).slice(-2) + ":" + ("0" + ddate.getMinutes()).slice(-2));
+            }
+            tabContent.find("#jangji").val('<%=data.jangji != null ? data.jangji.replace(/\n|\r\n|\r/g, '\\n') : ""%>');
+            tabContent.find("#gSangJu").val("<%=data.gSangJu != null ? data.gSangJu.replace(/\n|\r\n|\r/g, '\\n') : ""%>");
+            tabContent.find("#gSangJuTotal").val("<%=data.gSangJuTotal != null ?data.gSangJuTotal.replace(/\n|\r\n|\r/g, '\\n') : ""%>");
+            tabContent.find("#funeralService").val("<%=data.funeralService%>");
+            tabContent.find("#baecha").val("<%=data.baecha%>");
+            tabContent.find("#gMemo").val("<%=data.gMemo != null ? data.gMemo.replace(/\n/g, '\\n') : ""%>");
+
+
+            <%if(data.diagnosis==1){%>
+                tabContent.find("input:checkbox[name='diagnosis']").prop("checked", true);
+            <%}%>
+            <%if(data.first==1){%>
+                tabContent.find("input:checkbox[name='first']").prop("checked", true);
+            <%}%>
+            <%if(data.calculate==1){%>
+                tabContent.find("input:checkbox[name='calculate']").prop("checked", true);
+            <%}%>
+            tabContent.find("#gAllFont").val("<%=data.gAllFont%>").attr("selected", "selected");
+            tabContent.find("#gTemplate").val("<%=data.gTemplate%>").attr("selected", "selected");
+            tabContent.find("#gArrow").val("<%=data.gArrow%>").attr("selected", "selected");
+
+            <%if(data.gEnableLogo==1){%>
+                tabContent.find("#gEnableLogo").val("<%=data.gEnableLogo%>").attr("selected", "selected");
+            <%}%>
+            //종교이미지는 ajax로 가져오기때문에 데이터를 가져오는 함수에서 콜백으로 처리
+            //메인 이미지는 생략
+        <%}else if(type!=null && type=="new"){%>
+            tabContent.find("#ipgwanDate").val(new Date().toISOString().slice(0,10));
+            tabContent.find("#barinDate").val(new Date().toISOString().slice(0,10));
+            tabContent.find("#ddate").val(new Date().toISOString().slice(0,10));
+        <%}%>
+
+
+        previewDiv.one('load', function () {
+            //처음 로드 되었을때, type이 edit이면 데이터 입력.
+            <%if(type!=null && type=="edit"){%>
+                applyWizardData("<%=roomName%>");
+
+                <%
+                    var imagePath, religionPath;
+                    if(data.gImage != undefined && data.gImage.length>0){  imagePath = "/upload/guest/" + data.gImage; }
+                    if(data.gReligion != undefined && data.gReligion.length>0){    religionPath = "/storage/religion/" + data.gReligion;  }
+                %>
+                var frame = document.getElementById("previewDiv");
+                var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+                doc.setImage("<%=imagePath%>");
+                doc.setReligion("<%=religionPath%>");
+                doc.setIpgwanDate(tabContent.find("#ipgwanDate").val());
+                doc.setBarinDate(tabContent.find("#barinDate").val());
+                doc.setDDate(tabContent.find("#ddate").val());
+            <%}%>
+
+            previewDiv.load(function() {    //템플릿 변경되었을때 항상 입력
+                applyWizardData("<%=roomName%>");
+
+                var frame = document.getElementById("previewDiv");
+                var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+
+                if ("<%=imagePath%>".length > 0 ) {
+                    doc.setImage("<%=imagePath%>");
+                } else if ($("#gImage").val().length > 0) {
+                    imageChange(document.getElementById("gImage"));
+                }
+                doc.setIpgwanDate(tabContent.find("#ipgwanDate").val());
+                doc.setBarinDate(tabContent.find("#barinDate").val());
+                doc.setDDate(tabContent.find("#ddate").val());
+
+//                if($("#wizard #gImage").val().length>0){
+//                    imageChange(document.getElementById("wizard").getElementById("gImage"));
+//                }
+
+                if($("input:radio[name='gReligion']:radio:checked").val()){
+                    var frame = document.getElementById("previewDiv");
+                    var doc = frame.contentWindow || frame.contentDocument; //브라우저 호환을 위해
+                    doc.setReligion("/storage/religion/" + $("input:radio[name='gReligion']:radio:checked").val());
+                }
+            });
+        });
+
+
+        //Bootstrap Wizard Validations
+        var $validator = $("#wizard").validate({
+            rules: {
+                gName: {    required: true  },
+                //gAge: {     required: true  },
+                //<%if(type!=null && type=="edit"){%>
+                //gImage: {   required: false  },
+                //<%}else{%>
+                //gImage: {   required: true  },
+                //<%}%>
+                //ipgwanDate: {   required: true  },
+                //ipgwanTime: {   required: true  },
+                //barinDate: {    required: true  },
+                //barinTime: {    required: true  },
+                //jangji: {   required: true,     minlength: 5    },
+                //gSangJu: {  required: true  },
+                //gSangJuTotal: { required: true  }
+            },
+
+            messages: {
+                gName: "고인명을 입력해주세요.",
+                //gAge: "고인의 나이를 입력해주세요.",
+                //gImage: "고인의 기본 이미지를 선택해주세요."
+                //ipgwanDate: "입관일시를 입력해주세요.",
+                //ipgwanTime: "입관시간를 입력해주세요.",
+                //barinDate: "발인일시를 입력해주세요.",
+                //barinTime: "발인시간를 입력해주세요.",
+                //jangji: "장지를 입력해주세요.",
+                //gSangJu: "상주를 입력해주세요.",
+                //gSangJuTotal: "종합안내에서 보여질 상주 내용을 입력해주세요."
+            },
+
+            highlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+        $('#bootstrap-wizard').bootstrapWizard({
+            'tabClass': 'form-wizard',
+            'onPrevious': function (tab, navigation, index) {
+                $('#nextButton').removeClass("hide");
+                $('#finishButton').addClass("hide");
+            },
+            'onNext': function (tab, navigation, index) {
+                var $valid = $("#wizard").valid();
+                if (!$valid) {
+                    $validator.focusInvalid();
+                    return false;
+                } else {
+                    $('#bootstrap-wizard').find('.form-wizard').children('li').eq(index - 1).addClass('complete');
+                    $('#bootstrap-wizard').find('.form-wizard').children('li').eq(index - 1).find('.step')
+                        .html('<i class="fa fa-check"></i>');
+                }
+
+                if(index==1){
+                    $('#nextButton').addClass('hide');
+                    $('#finishButton').removeClass('hide');
+                }else{
+                    $('#nextButton').removeClass('hide');
+                    $('#finishButton').addClass('hide');
+                }
+            }
+        });
+
+        // fuelux wizard
+        var wizard = $('.wizard').wizard();
+
+        $('#finishButton').click(function () {
+            wizard.trigger('finished');
+        });
+
+        wizard.on('finished', function (e, data) {
+            <%if(type=="new"){%>
+                //$("#wizard").attr("method", "/room/roomNew");
+                insertGuest();
+            <%}else if(type="edit"){%>
+                $("#gID").val("<%=data.gID%>");
+                updateGuest();
+                //$("#wizard").attr("action", "/room/roomEdit");
+            <%}else{%>
+                alert("에러");
+            <%}%>
+        });
+
+        //초기 select setting(api로 받기 추가되면 이곳에서 실행 필요)
+        //여기서 ajax로 받아서 roomguest받아와보자. 
+        function createSelect(){
+            var insertMouner = $('#mourner-insert'); 
+            var mournerhtml = "";
+            for(var list of mournerSelectList){
+                mournerhtml+="<option value="+list+">"+list+"</option>";
+            }
+            insertMouner.find('#relation').append(mournerhtml); // 관계select추가
+
+            //bank
+            var bankhtml ="";
+            for(var lists of banklist){
+                bankhtml+="<option value="+lists+">"+lists+"</option>";
+            }
+            insertMouner.find('#bank').append(bankhtml);
+        }
+
+    })
+
+    function addMourner(){
+            //값을 추출 및 초기화 하기위해 선언한다 
+            var relations = $('#mourner-insert #relation option:selected');
+            var snames = $('#mourner-insert #sname');
+            var stel = $('#mourner-insert #stel');
+            var bank = $('#mourner-insert #bank option:selected');
+            var banknum = $('#mourner-insert #banknum');
+            var bankowner = $('#mourner-insert #bankowner');
+            var param = {
+                "sIDX" : '',
+                "regDate" : '',
+                "relation" : relations.val(),
+                "sname" : snames.val(),
+                "stel" : stel.val(),
+                "bank" : bank.val(),
+                "banknum" : banknum.val(),
+                "bankowner" : bankowner.val(),
+                "banklist" : banklist,
+                "mournerSelectList" : mournerSelectList
+            }
+            
+            Mournerinsert(param);
+
+            //값 초기화
+            snames.val(null);
+            stel.val(null);
+            banknum.val(null);
+            relations.parent().find('option:eq(0)').prop("selected",true);
+            bank.parent().find('option:eq(0)').prop("selected",true);
+
+        }
+    function Mournerinsert(param){
+        $("#addMourner").tmpl(param).appendTo("#mourner-list-body");
+    }
+
+    function deleteMourner(eventTr){
+        $(eventTr).parent().parent().remove();
+    }
+
+    function checkSelected(id, value){
+        if(id==value){
+            return "selected";
+        }else{
+            return "";
+        }
+    }
+
+    function saveModals(){
+        var relation = $('[name=relation] option:selected');
+        var size =$(relation).size();
+        var sname = $('[name=sname]');
+        var html = '';
+        for(var i=0; i<size; i++){
+            if(sname[i].value!=''){
+                html += relation[i].value+':';
+                html += sname[i].value+"\n";
+            }
+        }
+        
+        $('#gSangJu').val(html);
+        var ele = document.getElementById('gSangJu');
+        ele.dispatchEvent(new Event('input'));
+        $('.modal_close').click();
+    }
+
+
+</script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+    <template id="addMourner">
+        <tr>
+            <td class="mourner-type">
+                <input type="hidden" name="sIDX" value="${sIDX}">
+                <input type="hidden" name="regDate" value="${regDate}">
+                <select name="relation" id="relation" class="form-control">
+                    {{each(index, item) mournerSelectList}}
+                        {{if item==relation}} 
+                            <option value="${item}" selected>${item}</option>
+                        {{else}}
+                            <option value="${item}">${item}</option>
+                        {{/if}}
+                    {{/each}}
+                </select>
+            </td>
+            <td class="mourner-input">
+                <!-- input-group -->
+                <div class="">
+                    <input type="text" class="form-control input-md" placeholder="상주명을 입력해주세요" name="sname" id="sname" value='${sname}'>
+                </div>
+            </td>
+            <td class="mourner-input">
+                <input type="tel" class="form-control input-md" placeholder="010-0000-0000" name="stel" id="stel" value='${stel}'>
+            </td>
+            <td class="mourner-type">
+                <select name="bank" id="bank" class="form-control">
+                    {{each(index, items) banklist}}
+                        {{if items==bank}} 
+                            <option value="${items}" selected>${items}</option>
+                        {{else}}
+                            <option value="${items}">${items}</option>
+                        {{/if}}
+                    {{/each}}
+                </select>
+            </td>
+            <td class="mourner-input mourner-bank-account">
+                <input type="tel" class="form-control input-md" placeholder="계좌번호를 입력해주세요" name="banknum" id="banknum" value="${banknum}">
+            </td>
+            <td class="mourner-input">
+                <input type="tel" class="form-control input-md" placeholder="예금주명을 입력해주세요" name="bankowner" id="bankowner" value="${bankowner}">    
+            </td>
+            <td class="mourner-btn text-center" style="width:50px;">
+                <span class="btn btn-default mourner-delete-btn" onclick="deleteMourner(this)">-</span>
+            </td>
+        </tr>
+    </template>
