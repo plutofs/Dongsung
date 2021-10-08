@@ -4,11 +4,8 @@
 1.	node js 설치
 https://nodejs.org/ko/
 2.	package.json 수정
-3.	터미널 연후, node js경로로 진입, npm install 실행
-4.	루트경로로 진입, backup폴더 생성 후 storage폴더 붙여넣기(동성-머신에 압축파일 있음 )
-        (d:\workspace\ds_node기준, d:\backup\storage가필요)  
-5. backup폴더 안에 upload 폴더 추가, 안에 guest폴더 추가
-6.	전부 완료된 경우, 터미널에 node app.js 입력으로 실행
+3.	터미널 연후, node js경로로 진입, npm install 실행\
+4.	전부 완료된 경우, 터미널에 node app.js 입력으로 실행
 
 ##실행과정 -> roomEdit기준
   - roomEdit.ejs(views)로 이동
