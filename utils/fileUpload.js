@@ -11,10 +11,14 @@ exports.prototype = {
         var multer = require('multer');
 
         var deferred = Q.defer();
+        const fs = require('fs');
         var storage = multer.diskStorage({
             // 서버에 저장할 폴더
             destination: function (req, file, cb) {
                 var path = require('path');
+                if(!fs.existsSync(req.app.locals.uploadPath+uploadPath)){
+                    fs.mkdirSync(req.app.locals.uploadPath+uploadPath);
+                }
                 cb(null, path.join(req.app.locals.uploadPath + uploadPath));
             },
 

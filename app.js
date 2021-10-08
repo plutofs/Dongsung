@@ -15,8 +15,8 @@ app.locals.version = 3.02 ;
 app.locals.totalPwd = "8520";
 
 /** 실서버 */
-app.locals.storagePath = "/backup/storage/";
-app.locals.uploadPath = "/backup/upload/";
+app.locals.storagePath = "./public/storage/";
+app.locals.uploadPath = "/backup/upload";
 app.locals.privatePath = "/backup/private/";
 /** 개발환경 */
 //app.locals.storagePath = "/Users/KaSha/gitKaSha/workspace_dongsung/storage/";
